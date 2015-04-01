@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="uk.ac.ncl.eventb.why3.feature"
+      label="Why3 Adapter Plugin Feature"
+      version="1.0.3.qualifier"
+      provider-name="Newcastle University">
+
+   <description url="http://why3.lri.fr">
+      The plugin adds a reasoner and auto tactics based on external
+why3 prover manager tool. It makes available a wide range of SMT-LIB
+and TPTP compliant provers via the why3 umbrella tool. The plug-in
+can function eithe with a local installation of why3 and provers
+or connect remotely to a cloud service provide by Newcastle University
+hosting the proof environment.
+   </description>
+
+   <copyright url="http://www.ncl.ac.uk/csr/">
+      Newcastle University, 2014
+   </copyright>
+
+   <license url="https://www.eclipse.org/legal/epl-v10.html">
+      This is an experimnetal tool released for early adopters. Please do not use for production or critical applications.
+
+Distributed under the term terms of EPL v10.
+   </license>
+
+   <requires>
+      <import plugin="org.eventb.core.seqprover"/>
+      <import plugin="org.eventb.core.ast"/>
+      <import plugin="org.eventb.ui" version="2.8.0" match="greaterOrEqual"/>
+      <import plugin="org.eventb.core"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eventb.pp"/>
+   </requires>
+
+   <plugin
+         id="uk.ac.ncl.eventb.why3"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

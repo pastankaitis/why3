@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/uk.ac.ncl.eventb.why3.feature_1.0.3.201412111410.jar" id="uk.ac.ncl.eventb.why3.feature" version="1.0.3.201412111410">
+      <category name="Why3 Adapter (Experimental)"/>
+   </feature>
+   <category-def name="Why3 Adapter (Experimental)" label="Why3 Adapter (Experimental)">
+      <description>
+         Releases of the alpha-versions of why3 local/cloud adapter. Only for testing.
+      </description>
+   </category-def>
+</site>
