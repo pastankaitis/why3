@@ -1,0 +1,4 @@
+eclipse.preferences.version=1
+externalMigrateFromAuthorizationDatabase/isMigrated=true
+migrateFromAuthorizationDatabase/isMigrated=true
+repositories/00779679382d00141864f20c83bb26ad=00779679382d00141864f20c83bb26ad;https\://svn.cs.ncl.ac.uk/OSLC/;com.why3.ws;branches;tags;trunk;true;50452f43-0360-48f0-8289-a7a163386a17;https\://svn.cs.ncl.ac.uk/OSLC;;false;;;0

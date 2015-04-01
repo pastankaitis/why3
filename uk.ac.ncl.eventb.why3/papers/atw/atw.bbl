@@ -1,0 +1,19 @@
+\begin{thebibliography}{1}
+
+\bibitem{EventBBook}
+J.-R. Abrial.
+\newblock {\em Modelling in Event-B}.
+\newblock Cambridge University Press, 2010.
+
+\bibitem{boogie11why3}
+Fran\c{c}ois Bobot, Jean-Christophe Filli\^atre, Claude March\'e, and Andrei
+  Paskevich.
+\newblock Why3: Shepherd your herd of provers.
+\newblock In {\em Boogie 2011: First International Workshop on Intermediate
+  Verification Languages}, pages 53--64, August 2011.
+
+\bibitem{RodinPlatform}
+{The RODIN platform}.
+\newblock Online at http://rodin-b-sharp.sourceforge.net/.
+
+\end{thebibliography}

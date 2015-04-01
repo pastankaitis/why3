@@ -1,0 +1,56 @@
+theory POx
+	use import int.Int
+	use import bool.Bool
+	use import int.EuclideanDivision
+	use import set.Set
+	use import set.SetComprehension
+	use import set.Fset
+	use import settheory.Interval
+	use import settheory.PowerSet
+	use import settheory.Relation
+	use import settheory.Image
+	use import settheory.InverseDomRan
+	use import settheory.Function
+	use import settheory.PowerSet
+	use import settheory.PowerRelation
+	use import eventb.Prods
+	use import eventb.FuncRel
+	use import eventb.SetProp
+	use import eventb.SetRelMod
+	use import eventb.Extras
+	use import inference.Inference
+
+
+	constant ebid_s1 : int
+	constant ebid_xor : (set (((int, int), int), int))
+	constant ebid_v : int
+	constant ebid_H : (set ((int, int), int))
+	constant ebid_s3 : int
+	constant ebid_s2 : int
+
+	(* xor∈{0,1} × {0,1} × {0,1} → {0,1} *)
+	axiom axm1 :(mem ebid_xor ((cprod (cprod (add 0 (singleton 1)) (add 0 (singleton 1))) (add 0 (singleton 1))) --> (add 0 (singleton 1))))
+	(* ∀a,b,c·a∈{0,1}∧b∈{0,1}∧c∈{0,1}∧a+b+c=1⇒xor(a ↦ b ↦ c)=1 *)
+	axiom axm2 :(forall ebid_a : int, ebid_b : int, ebid_c : int . ((((((mem ebid_a (add 0 (singleton 1))) /\ (mem ebid_b (add 0 (singleton 1)))) /\ (mem ebid_c (add 0 (singleton 1)))) /\ (((ebid_a + ebid_b) + ebid_c) = 1)) -> ((apply ebid_xor ((ebid_a ,  ebid_b) ,  ebid_c)) = 1))))
+	(* v∈{0,1} *)
+	axiom axm3 :(mem ebid_v (add 0 (singleton 1)))
+	(* s1∈{0,1} *)
+	axiom axm4 :(mem ebid_s1 (add 0 (singleton 1)))
+	(* s2∈{0,1} *)
+	axiom axm5 :(mem ebid_s2 (add 0 (singleton 1)))
+	(* s3∈{0,1} *)
+	axiom axm6 :(mem ebid_s3 (add 0 (singleton 1)))
+	(* s1+s2+s3≤1 *)
+	axiom axm7 :(((ebid_s1 + ebid_s2) + ebid_s3) <= 1)
+	(* H⊆{0,1} × {0,1} × {0,1} *)
+	axiom axm8 :(subset ebid_H (cprod (cprod (add 0 (singleton 1)) (add 0 (singleton 1))) (add 0 (singleton 1))))
+	(* s1 ↦ s2 ↦ s3∈H *)
+	axiom axm9 :(mem ((ebid_s1 ,  ebid_s2) ,  ebid_s3) ebid_H)
+	(* s1+s2+s3=1⇒(∀e1,e2,e3·e1∈{0,1}∧e2∈{0,1}∧e3∈{0,1}∧e1+e2+e3=1⇒e1 ↦ e2 ↦ e3∈H) *)
+	axiom axm10 :((((ebid_s1 + ebid_s2) + ebid_s3) = 1) -> (forall ebid_e1 : int, ebid_e2 : int, ebid_e3 : int . ((((((mem ebid_e1 (add 0 (singleton 1))) /\ (mem ebid_e2 (add 0 (singleton 1)))) /\ (mem ebid_e3 (add 0 (singleton 1)))) /\ (((ebid_e1 + ebid_e2) + ebid_e3) = 1)) -> (mem ((ebid_e1 ,  ebid_e2) ,  ebid_e3) ebid_H)))))
+	(* ∀g1,g2,g3·g1 ↦ g2 ↦ g3∈H⇒s1 ↦ s2 ↦ s3∈dom(xor)∧xor∈ℤ × ℤ × ℤ ⇸ ℤ∧g1 ↦ g2 ↦ g3∈dom(xor) *)
+	axiom axm11 :(forall ebid_g1 : int, ebid_g2 : int, ebid_g3 : int . (((mem ((ebid_g1 ,  ebid_g2) ,  ebid_g3) ebid_H) -> (((mem ((ebid_s1 ,  ebid_s2) ,  ebid_s3) (dom ebid_xor)) /\ (mem ebid_xor ((cprod (cprod integer integer) integer) +-> integer))) /\ (mem ((ebid_g1 ,  ebid_g2) ,  ebid_g3) (dom ebid_xor))))))
+
+	goal g0: 	(* {g1,g2,g3·g1 ↦ g2 ↦ g3∈H∧xor(s1 ↦ s2 ↦ s3)=xor(g1 ↦ g2 ↦ g3) ∣ g1 ↦ g2 ↦ g3}⊆{0,1} × {0,1} × {0,1} *)
+(subset (bsetc (\ebid_g1 : int, ebid_g2 : int, ebid_g3 : int .((mem ((ebid_g1 ,  ebid_g2) ,  ebid_g3) ebid_H) /\ ((apply ebid_xor ((ebid_s1 ,  ebid_s2) ,  ebid_s3)) = (apply ebid_xor ((ebid_g1 ,  ebid_g2) ,  ebid_g3))))) (\ebid_g1 : int, ebid_g2 : int, ebid_g3 : int .((ebid_g1 ,  ebid_g2) ,  ebid_g3))) (cprod (cprod (add 0 (singleton 1)) (add 0 (singleton 1))) (add 0 (singleton 1))))
+end

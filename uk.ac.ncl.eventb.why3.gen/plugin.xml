@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+  <extension point="org.eclipse.core.contenttype.contentTypes">
+    <content-type
+      file-extensions="tgen"
+      priority="high"
+      name="Why3 Plug-in Translation Definitions"
+      id="uk.ac.ncl.eventb.why3.gen.tgen"
+      base-type="org.eclipse.core.runtime.xml">
+    </content-type>
+  </extension>  
+
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            default="false"
+            filenames="*.reqs"
+            icon="icons/vcatalog.gif"
+            id="uk.ac.ncl.eventb.why3.gen.editor"
+            name="Why3 Plug-in Translation Definitions Editor">
+ 			<class class="org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml">
+	      		<parameter name="sdef" value="uk.ac.ncl.eventb.why3.gen.ui.propcatalog"/>
+    		</class>            
+      </editor>
+   </extension>
+
+  <extension point="org.eclipse.ui.newWizards">
+    <wizard
+          finalPerspective="org.eventb.ui.perspective.eventb"
+          icon="icons/vcatalog.gif"
+          id="uk.ac.ncl.eventb.why3.gen.Wizard"
+          name="Properties"
+          preferredPerspectives="org.eventb.ui.perspective.eventb">
+      <description>Create new translation definitions document.</description>
+      <class class="org.eclipse.sapphire.workspace.ui.CreateWorkspaceFileWizard">
+        <parameter name="sdef" value="uk.ac.ncl.eventb.why3.gen.ui.wizard"/>
+        <parameter name="editor" value="uk.ac.ncl.eventb.why3.gen.editor"/>
+      </class>
+    </wizard>
+  </extension>
+   <extension
+         point="org.eclipse.ui.navigator.viewer">
+      <viewerContentBinding
+            viewerId="fr.systerel.explorer.navigator.view">
+         <includes>
+            <contentExtension
+                  isRoot="false"
+                  pattern="uk.ac.ncl.eventb.why3.gen.content.tgen">
+            </contentExtension>
+         </includes>
+      </viewerContentBinding>
+      <viewerActionBinding
+            viewerId="fr.systerel.explorer.navigator.view">
+         <includes>
+            <actionExtension
+                  pattern="uk.ac.ncl.eventb.why3.gen.ui.misc.TGenActionProvider">
+            </actionExtension>
+         </includes>
+      </viewerActionBinding>
+   </extension>
+   <extension
+         point="org.eclipse.ui.navigator.navigatorContent">
+      <navigatorContent
+            activeByDefault="true"
+            contentProvider="uk.ac.ncl.eventb.why3.gen.ui.misc.TGenContentProvider"
+            icon="icons/Component.png"
+            id="uk.ac.ncl.eventb.why3.gen.content.tgen"
+            labelProvider="uk.ac.ncl.eventb.why3.gen.ui.misc.TGenLabelProvider"
+            name="Why3 Plug-in Translation Definitions"
+            priority="highest"
+            providesSaveables="true">
+         <triggerPoints>
+            <or>
+               <adapt
+                     type="org.eclipse.core.resources.IProject">
+               </adapt>
+            </or>
+         </triggerPoints>
+         <possibleChildren>
+            <or>
+               <instanceof
+                     value="uk.ac.ncl.eventb.why3.gen.ui.misc.RawTGenFile">
+               </instanceof>
+            </or>
+         </possibleChildren>
+         <commonSorter
+               class="fr.systerel.internal.explorer.navigator.sorters.AntiSorter">
+         </commonSorter>
+      </navigatorContent>
+      <actionProvider
+            class="uk.ac.ncl.eventb.why3.gen.ui.misc.TGenActionProvider"
+            id="uk.ac.ncl.eventb.why3.gen.ui.misc.TGenActionProvider"
+            priority="highest">
+         <enablement>
+            <or>
+               <instanceof
+                     value="uk.ac.ncl.eventb.why3.gen.ui.misc.RawTGenFile">
+               </instanceof>
+            </or>
+         </enablement>
+      </actionProvider>
+   </extension>
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="uk.ac.ncl.eventb.why3.gen.GenPlugin">
+      </startup>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            allowMultiple="false"
+            category="org.eventb.ui"
+            class="uk.ac.ncl.eventb.why3.gen.iplemma.IPLemmaViewPart"
+            icon="icons/exlamation_16.png"
+            id="uk.ac.ncl.eventb.why3.gen.iplemma.view"
+            name="Schematic Lemma"
+            restorable="true">
+      </view>
+   </extension>
+
+	  
+</plugin>

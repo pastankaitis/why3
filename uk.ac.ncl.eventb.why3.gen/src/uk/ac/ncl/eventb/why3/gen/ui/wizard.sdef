@@ -1,0 +1,20 @@
+<definition>
+    <import>
+        <definition>org.eclipse.sapphire.workspace.ui.CreateWorkspaceFileForm</definition>
+        <package>uk.ac.ncl.eventb.why3.gen.ui</package>
+    </import>
+    <wizard>
+        <id>CreatePropertyWizard</id>
+        <label>New Why3 Translation Customisation</label>
+        <page>
+            <id>CreateverPropertyWizard.MainPage</id>
+            <label>Properties</label>
+            <description>Create a Data Property Document.</description>
+            <content>
+                <include>CreateWorkspaceFileForm</include>
+            </content>
+            <scale-vertically>true</scale-vertically>
+        </page>
+        <element-type>uk.ac.ncl.eventb.why3.gen.ui.CreateCatalogOp</element-type>
+    </wizard>    
+</definition>

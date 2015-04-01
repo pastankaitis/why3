@@ -1,0 +1,150 @@
+theory POx
+	use import int.Int
+	use import bool.Bool
+	use import int.EuclideanDivision
+	use import set.Set
+	use import set.SetComprehension
+	use import set.Fset
+	use import settheory.Interval
+	use import settheory.PowerSet
+	use import settheory.Relation
+	use import settheory.Image
+	use import settheory.InverseDomRan
+	use import settheory.Function
+	use import settheory.PowerSet
+	use import settheory.PowerRelation
+	use import eventb.Prods
+	use import eventb.FuncRel
+	use import eventb.SetProp
+	use import eventb.SetRelMod
+	use import eventb.Extras
+	use import inference.Inference
+
+	(*Extras*)
+	goal natural1: 
+		mem 0 natural1
+
+	goal natural1n:
+		not (mem 0 natural1)
+
+	goal natural2:
+		inter natural1 natural = empty
+	
+	goal natural2n:
+		not (inter natural1 natural = empty)
+
+	(*goal unMinus:
+		forall x : int.
+			(unMinus x) + x <> 0
+
+	goal unMinusn:
+		forall x : int.
+			not ((unMinus x) + x <> 0)
+	*)	
+
+	(*Products*)
+	goal cartesian:
+		forall s : set 'a.
+			(cprod s (empty : set 'b)) <> (empty : rel 'a 'b)
+
+	goal cartesiann:
+		forall s : set 'a.
+			not ((cprod s (empty : set 'b)) <> (empty : rel 'a 'b))
+
+	(*SetProp*)
+	goal subsetprop:
+		forall s1 : set 'a.
+			subsetprop s1 empty
+
+	goal subsetpropn: 
+		forall s1 : set 'a.
+			not (subsetprop s1 empty)
+
+	goal finite:
+		forall x : 'a.
+				(not finite (singleton x))
+	
+	goal finiten:
+		forall x : 'a.
+				not (not finite (singleton x))
+
+	goal maxmin:
+		(min (add 3(singleton 2))) > (max (add 3(singleton 2))) 
+
+	goal maxminn:
+		not ((min (add 3(singleton 2))) > (max (add 3(singleton 2))))
+
+	goal power:
+		forall s : set 'a.
+			subset (pow s) (pow1 s) 
+	
+	goal powern:
+		forall s : set 'a.
+			not (subset (pow s) (pow1 s)) 
+
+	goal cardinality:
+		card (add 3 (singleton 2)) < (card  (singleton 2))
+
+	goal cardinalityn:
+		not (card (add 3 (singleton 2)) < (card  (singleton 2)))
+
+	(*SetRelMod*)
+	
+
+	goal domainRestriction:
+		forall r : rel 'a 'b.
+			not subset ((dom r)  <| r) r
+
+	goal domainRestrictionn:
+		forall r : rel 'a 'b.
+			not (not subset ((dom r)  <| r) r)
+
+	goal domainSubtraction:
+		forall r : rel 'a 'b, s : set 'a.
+			(inter (s <| r)  (s <<| r)) <> empty
+
+	goal domainSubtractionn:
+		forall r : rel 'a 'b, s : set 'a.
+			not ((inter (s <| r)  (s <<| r)) <> empty)
+
+	goal rangeRestriction:
+		forall r : rel 'a 'b.
+			not subset ( r |> (ran r) ) r
+
+	goal rangeRestrictionn:
+		forall r : rel 'a 'b.
+			not ( not subset ( r |> (ran r) ) r)
+
+	goal rangeSubtraction: (*Need better lemmas*)
+		forall r : rel 'a 'b, t : set 'b.
+			(union (r |> t)  (r |>> t)) = empty
+	
+	goal rangeSubtractionn:
+		forall r : rel 'a 'b, t : set 'b.
+			not ((union (r |> t)  (r |>> t)) = empty)
+
+	goal ginter:
+		(ginter empty : (set (set 'a))) <> empty
+		
+	goal gintern:
+		not (ginter empty : (set (set 'a)) <> empty)
+	
+	goal gunion:
+		gunion (empty : set (set 'a)) <> empty
+	
+	goal gunionn:
+		not (gunion (empty : set (set 'a)) <> empty)
+
+	(*FuncRel*)
+	
+		
+
+
+
+
+
+
+	
+	
+		
+end

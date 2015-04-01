@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definition>
+
+	<composite>
+		<id>LemmaAxiomForm</id>
+		<documentation>
+			<title>Verification Catalog</title>
+			<content>This would be the help content...
+			</content>
+		</documentation>
+		<content>
+            <label>Label</label>
+            <property-editor>
+                <show-label>false</show-label>
+                <property>Id</property>
+            </property-editor>
+            <label>
+                <visible-when>${Kind == 'Test'}</visible-when>
+                <text>A test condition is a form of a lemma but is not included in the context of other lemmata and does not appear in the final axiomatization document.</text>
+            </label>
+            <property-editor>
+                <style>Sapphire.PropertyEditor.RadioButtonGroup.Horizontal</style>
+                <property>Kind</property>
+                <show-label>false</show-label>
+                <documentation>
+                    <title>Type of condition</title>
+                    <content>A condition may be either an axiom - a statement posutulated without further checks; a lemma - statement that must be proven correct in the context of preceding definitions, axioms and lemmata; and, finally a test - a form of lemma that used to check intuition behind preceding definitions and lemmata. Unlike lemma, a test condition is not included in the context of other lemmata and does not appear in the final axiomatization document.</content>
+                </documentation>
+            </property-editor>
+            <label>Body</label>
+            <property-editor>
+                <show-label>false</show-label>
+                <property>Body</property>
+                <hint>
+                    <name>factory</name>
+                    <value>Why3ElementEditor$Factory</value>
+                </hint>
+                <scale-vertically>true</scale-vertically>
+            </property-editor>
+		</content>
+		<scale-vertically>true</scale-vertically>
+		<width>600</width>
+		<height>500</height>
+        <indent>true</indent>
+	</composite>
+
+	<editor-page>
+		<id>CatalogEditorPage</id>
+		<element-type>uk.ac.ncl.eventb.why3.gen.ui.TranslationCatalog</element-type>
+		<page-name>translation definitions</page-name>
+		<page-header-text>translation definitions</page-header-text>
+		<root-node>
+-- 
+           
+            <node>
+                <label>Imports</label>
+                <node-factory>
+                    <property>Imports</property>
+                    <case>
+                        <element-type>uk.ac.ncl.eventb.why3.gen.ui.TranslationLink</element-type>
+                        <section>
+                            <label>${Kind == 'Link' ? &quot;Translation reference&quot; : &quot;Library theory&quot;} ${Kind == 'Link' ? Path : Library}</label>
+                            <content>
+                                <include>DataForm</include>
+                            </content>
+                        </section>
+                        <label>${Kind == 'Link' ? &quot;Translation reference&quot; : &quot;Library theory&quot;} ${Kind == 'Link' ? Path : Library}</label>
+                    </case>
+                </node-factory>
+            </node><node>
+            <label>Translation Rules</label>
+            <node-factory>
+                <property>Rules</property>
+                <case>
+                    <element-type>uk.ac.ncl.eventb.why3.gen.ui.TranslationRule</element-type>
+                        <label>${Source== null ? &quot;&lt;undefined&gt;&quot; : Source}</label>
+                        <section>
+                            <label>Mapping Operator ${Source== null ? &quot;&lt;undefined&gt;&quot; : Source}</label>
+                            <content>
+                                <label>
+                                    <visible-when>${GUIMode != 'source'}</visible-when>
+                                    <text>Event-B operator</text>
+                                </label>
+                                <property-editor>
+                                    <show-label>false</show-label>
+                                    <property>Source</property>
+                                    <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
+                                    <visible-when>${GUIMode != 'source'}</visible-when>
+                                </property-editor>
+                                <label>
+                                    <visible-when>${GUIMode != 'source'}</visible-when>
+                                    <text>Target Why3 Symbol</text>
+                                </label>
+                                <property-editor>
+                                    <show-label>false</show-label>
+                                    <property>Target</property>
+                                    <visible-when>${GUIMode != 'source'}</visible-when>
+                                </property-editor>
+                                <separator>
+                                    <visible-when>${GUIMode != 'source'}</visible-when>
+                                </separator>
+                                <section>
+                                    <content>
+                                        <property-editor>
+                                            <show-label>false</show-label>
+                                            <property>Body</property>
+                                            <hint>
+                                                <name>factory</name>
+                                                <value>Why3ElementEditor$Factory</value>
+                                            </hint>
+                                        </property-editor>
+                                    </content>
+                                    <label>Direct Definition</label>
+                                    <visible-when>${Target != null and GUIMode != 'source'}</visible-when>
+                                    <collapsible>true</collapsible>
+                                    <collapsed-initially>true</collapsed-initially>
+                                </section>
+                                <section>
+                                    <label>Why3 Translation</label>
+                                    <visible-when>${Target != null and GUIMode != 'source'}</visible-when>
+                                    <content>
+                                        <label>${rule:Describe()}</label>
+                                    </content>
+                                    <scale-vertically>true</scale-vertically>
+                                    <collapsible>false</collapsible>
+                                </section>
+                                <html>
+                                    <content>${rule:TranslateRule()}</content>
+                                    <scale-vertically>false</scale-vertically>
+                                    <visible-when>${GUIMode == 'source'}</visible-when>
+                                    <height>450</height>
+                                </html>
+                                <custom>
+                                    <class>uk.ac.ncl.eventb.why3.gen.ui.misc.SourceViewHtmlPanelPart</class>
+                                    <scale-vertically>true</scale-vertically>
+                                </custom>
+                            </content>
+                            <action>
+                                <id>qqq</id>
+                                <label>qqq</label>
+                                <type>TOGGLE</type>
+                            </action>
+                            <action-handler>
+                                <action>qqq</action>
+                                <description>saaasdasd</description>
+                                <id>qqq</id>
+                                <impl>uk.ac.ncl.eventb.why3.gen.ui.SwitchToSourceView</impl>
+                                <label>qqq</label>
+                            </action-handler>
+                            <scroll-vertically>true</scroll-vertically>
+                            <height>450</height>
+                        </section>
+                        <section-ref>CommentSection</section-ref>
+                        <image>/icons/Components.png</image>
+                        <node-include>ConditionsFactory</node-include>
+                        <node>
+                            <section-ref>DependenciesSection</section-ref>
+                            <label>Dependencies</label>
+                        </node>
+                </case>
+            </node-factory>
+                <node-factory>
+                    <property>Patterns</property>
+                    <case>
+                        <element-type>uk.ac.ncl.eventb.why3.gen.ui.TranslationPattern</element-type>
+                        <label>${Id == null ? &quot;&lt;undefined&gt;&quot; : Id}</label>
+                        <image>/icons/Components.png</image>
+                        <section>
+                            <label>Translation pattern ${Id == null ? &quot;&lt;unnamed&gt;&quot; : Id}</label>
+                            <content>
+                                <label>Label</label>
+                                <property-editor>
+                                    <show-label>false</show-label>
+                                    <property>Id</property>
+                                </property-editor>
+                                <label>Types</label>
+                                <property-editor>
+                                    <show-label>false</show-label>
+                                    <property>Types</property>
+                                    <child-property>
+                                        <label>Schematic variable</label>
+                                        <property>Id</property>
+                                    </child-property>
+                                    <child-property>
+                                        <label>Variable type</label>
+                                        <property>Type</property>
+                                        <hint>
+                                            <name>factory</name>
+                                            <value>uk.ac.ncl.eventb.why3.gen.ui.Test$Factory</value>
+                                        </hint>
+                                        <height>50</height>
+                                        <style>Sapphire.PropertyEditor.Scale</style>
+                                    </child-property>
+                                </property-editor>
+                                <label>Event-B Pattern Expression</label>
+                                <property-editor>
+                                    <show-label>false</show-label>
+                                    <property>Pattern</property>
+                                    <hint>
+                                        <name>factory</name>
+                                        <value>EventBElementEditor$Factory</value>
+                                    </hint>
+                                </property-editor>
+                                <label>Target Why3 Expression</label>
+                                <property-editor>
+                                    <show-label>false</show-label>
+                                    <property>Body</property>
+                                    <hint>
+                                        <name>factory</name>
+                                        <value>Why3ElementEditor$Factory</value>
+                                    </hint>
+                                </property-editor>
+                            </content>
+                        </section>
+                    </case>
+                </node-factory>
+            </node>
+           <node>
+            <label>Axiomatization</label>
+                <node-include>ConditionsFactory</node-include>	            
+            </node>
+
+		</root-node>
+        <persistent-state-element-type>org.eclipse.sapphire.ui.forms.MasterDetailsEditorPageState</persistent-state-element-type>
+	</editor-page>
+    <form>
+        <id>DataForm</id>
+        <content>
+            <property-editor>
+                <show-label>false</show-label>
+                <property>Kind</property>
+                <style>Sapphire.PropertyEditor.RadioButtonGroup.Horizontal</style>
+            </property-editor>
+            <label>${Kind == 'Link' ? &quot;Translation reference&quot; : &quot;Library theory&quot;}</label>
+            <property-editor>
+  <action-handler>
+    <action>Sapphire.Browse</action>
+    <impl>org.eclipse.sapphire.ui.forms.swt.AbsoluteFilePathBrowseActionHandler</impl>
+    <param>
+      <name>extensions</name>
+      <value>tgen</value>
+    </param>
+  </action-handler>
+  <action-handler>
+    <action>Sapphire.Browse</action>
+    <impl>org.eclipse.sapphire.workspace.ui.WorkspaceRelativePathBrowseActionHandler</impl>
+    <param>
+      <name>extensions</name>
+      <value>tgen</value>
+    </param>
+    <param>
+      <name>leading-slash</name>
+      <value>false</value>
+    </param>
+  </action-handler>
+                <property>Path</property>
+                <show-label>false</show-label>
+                <visible-when>${Kind == 'Link'}</visible-when>
+            </property-editor>
+            <property-editor>
+                <show-label>false</show-label>
+                <property>Library</property>
+                <visible-when>${Kind == 'Library'}</visible-when>
+                <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
+            </property-editor>
+        </content>
+    </form>
+    <section>
+        <content>
+            <property-editor>
+                <scale-vertically>true</scale-vertically>
+                <property>Comment</property>
+                <show-label>false</show-label>
+                <span>true</span>
+                <hint>
+                    <name>border</name>
+                    <value>false</value>
+                </hint>
+                <height>100</height>
+            </property-editor>
+        </content>
+        <label>Comment</label>
+        <id>CommentSection</id>
+        <collapsible>true</collapsible>
+        <scroll-vertically>true</scroll-vertically>
+        <collapsed-initially>true</collapsed-initially>
+        <indent>false</indent>
+    </section>
+    <import>
+        <package>uk.ac.ncl.eventb.why3.gen.ui</package>
+        <package>uk.ac.ncl.eventb.why3.gen.pattern</package>
+    </import>
+            <node-factory>
+                <property>Conditions</property>
+                <case>
+                    <element-type>uk.ac.ncl.eventb.why3.gen.ui.TranslationCondition</element-type>
+                    <label>${Kind == 'Axiom' ? &quot;Axiom&quot; : (Kind == 'Lemma' ? &quot;Lemma&quot; : &quot;Test&quot;)} ${Id == null ? &quot;&lt;undefined&gt;&quot; : Id }</label>
+                    <section>
+                        <label>${Kind == 'Axiom' ? &quot;Axiom&quot; : (Kind == 'Lemma' ? &quot;Lemma&quot; : &quot;Test&quot;)} ${Id == null ? &quot;&lt;unnamed&gt;&quot; : Id}</label>
+                            <content>
+                                <include>LemmaAxiomForm</include>
+                            </content>
+                    </section>
+                        <section-ref>CommentSection</section-ref>
+                        <image>/icons/icon_package_get.gif</image>
+            <node>
+                <label>Triggers</label>
+                <section-ref>TriggersSection</section-ref>
+            </node>
+            <node>
+                <section-ref>DependenciesSection</section-ref>
+                <label>Dependencies</label>
+            </node>
+                </case>
+        <id>ConditionsFactory</id>
+            </node-factory>
+    <section>
+        <id>TriggersSection</id>
+        <label>Triggers</label>
+        <content>
+            <property-editor>
+                <show-label>false</show-label>
+                <property>TriggerKind</property>
+                <visible-when>${Kind != 'Test'}</visible-when>
+            </property-editor>
+            <property-editor>
+                <child-property>
+                    <label>Trigger definition</label>
+                    <property>Spec</property>
+                    <show-label>true</show-label>
+                </child-property>
+                <property>Triggers</property>
+                <scale-vertically>true</scale-vertically>
+                <show-label>false</show-label>
+                <visible-when>${TriggerKind == 'Custom'}</visible-when>
+            </property-editor>
+            <property-editor>
+                <label>Goal Only</label>
+                <property>TriggerGoalOnly</property>
+                <show-label>true</show-label>
+                <visible-when>${TriggerKind == 'Custom'}</visible-when>
+            </property-editor>
+        </content>
+    </section>
+    <section>
+        <id>DependenciesSection</id>
+        <label>Dependencies</label>
+        <description>The list of translation elements on which the current element depends and that cannot be deduced automatically.</description>
+        <content>
+            <label>Translation rule dependencies</label>
+            <property-editor>
+                <child-property>
+                    <show-label>true</show-label>
+                    <property>RuleDependency</property>
+                    <label>Referenced rules</label>
+                </child-property>
+                <property>RuleDependencies</property>
+                <show-label>false</show-label>
+            </property-editor>
+            <label>
+                <visible-when>${InstanceOf(this, &quot;uk.ac.ncl.eventb.why3.gen.ui.TranslationCondition&quot;)}</visible-when>
+                <text>Lemmata and Axioms that must be included in dependencies</text>
+            </label>
+            <property-editor>
+                <show-label>false</show-label>
+                <property>ConditionDependencies</property>
+                <visible-when>${InstanceOf(this, &quot;uk.ac.ncl.eventb.why3.gen.ui.TranslationCondition&quot;)}</visible-when>
+                <child-property>
+                    <show-label>true</show-label>
+                    <property>ConditionDependency</property>
+                    <label>Referenced lemmata and axioms</label>
+                </child-property>
+            </property-editor>
+        </content>
+    </section>
+
+</definition>

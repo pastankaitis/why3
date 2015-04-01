@@ -1,0 +1,50 @@
+This is BibTeX, Version 0.99d (TeX Live 2013/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: arw13.aux
+The style file: plain.bst
+Database file #1: allrefs2.bib
+Warning--empty title in RodinPlatform
+Warning--empty booktitle in RodinPlatform
+Warning--empty year in RodinPlatform
+You've used 4 entries,
+            2118 wiz_defined-function locations,
+            519 strings with 4581 characters,
+and the built_in function-call counts, 1383 in all, are:
+= -- 126
+> -- 50
+< -- 2
++ -- 20
+- -- 16
+* -- 82
+:= -- 213
+add.period$ -- 11
+call.type$ -- 4
+change.case$ -- 18
+chr.to.int$ -- 0
+cite$ -- 7
+duplicate$ -- 69
+empty$ -- 128
+format.name$ -- 16
+if$ -- 306
+int.to.chr$ -- 0
+int.to.str$ -- 4
+missing$ -- 5
+newline$ -- 22
+num.names$ -- 8
+pop$ -- 38
+preamble$ -- 1
+purify$ -- 16
+quote$ -- 0
+skip$ -- 49
+stack$ -- 0
+substring$ -- 72
+swap$ -- 22
+text.length$ -- 2
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 14
+warning$ -- 3
+while$ -- 13
+width$ -- 5
+write$ -- 41
+(There were 3 warnings)

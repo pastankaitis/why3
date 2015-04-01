@@ -1,0 +1,58 @@
+theory Inference
+
+	use import eventb.Prods
+	use import eventb.FuncRel
+	use import eventb.SetProp
+	use import eventb.SetRelMod
+	use import eventb.Extras
+	
+	lemma  inference1: (*FIN_FUN_DOM eProver 24.68s*)
+		forall f : (rel 'a 'b), s : set 'a, t : set 'b.
+			((mem f (s +-> t)) /\ finite s) 
+					-> finite f
+
+	lemma inference2: (*FIN_REL_IMG_R eProver 20s*)
+		forall f : (rel 'a 'b), dom : set 'a.
+			finite f ->
+				finite (image f dom)
+	
+	lemma inference3: (*FIN_SUBSETEQ_R undischarged*)
+		forall s t : set 'a.
+			finite t /\ subset s t ->
+					finite s
+
+	lemma inference4: (*FIN_KINTER_R eProver 29.20s*)
+		forall s : set (set 'a).
+			(exists t : set 'a. mem t s /\ not finite t) ->
+						not finite(ginter s)
+
+	lemma inference5:(*FIN_GE_0 undischarged*)
+		forall s: set int.	
+	    	(exists n : int.
+				forall x : int . (mem x s -> (x >= 0 /\ x <= n))) 
+					->
+					finite s 				 	
+	
+	lemma inference6: (*FIN_SETMINUS_R eProver 0.02s*)
+		forall s t : set 'a.
+			finite s ->
+				finite (diff s t)
+
+	lemma inference7: (*FIN_REL eProver 0.07*)
+		forall f : rel 'a 'b, s : set 'a, t : set 'b.
+			mem f (s +-> t) /\ finite s /\ finite t ->
+					finite f
+	
+	lemma inference8: (*FIN_FUN2_R eProver 20.62s Needs double check!!*)
+		forall f : rel 'a 'b, s : set 'a, t : set 'b.
+			mem (inverse f) (t +-> s) /\ finite s ->
+					finite f
+					
+	lemma inference9: (*SIM_OV_REL*)
+		forall f : rel 'a 'b, s : set 'a, t : set 'b, x : 'a, y : 'b.
+			(mem x s /\ mem y t) ->
+				(mem f (s +-> t) -> 
+						mem (f <+ singleton (x, y)) (pow (cprod s t)))
+
+	
+end

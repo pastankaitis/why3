@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eventb.core.seqprover.reasoners">
+      <reasoner
+            class="uk.ac.ncl.eventb.why3.main.Why3Reasoner"
+            contextDependent="false"
+            id="why3"
+            name="%reasoner.name">
+      </reasoner>
+   </extension>
+   <extension
+         point="org.eventb.ui.proofTactics">
+      <dynamic_dropdown
+            icon="icons/15-Light-Bulb-icon.png"
+            id="uk.ac.ncl.eventb.why3.dynamic_unrestricted"
+            name="why3 (unrestricted)"
+            tacticProvider="uk.ac.ncl.eventb.why3.tactics.Why3DynTacticUnrestricted"
+            toolbar="org.eventb.ui.sequentToolbar">
+      </dynamic_dropdown>
+      <dynamic_dropdown
+            icon="icons/15-Light-Bulb-icon_r.png"
+            id="uk.ac.ncl.eventb.why3.dynamic_restricted"
+            name="why3 (restricted)"
+            tacticProvider="uk.ac.ncl.eventb.why3.tactics.Why3DynTacticRestricted"
+            toolbar="org.eventb.ui.sequentToolbar">
+      </dynamic_dropdown>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eventb.ui.preferences.eventB"
+            class="uk.ac.ncl.eventb.why3.prefpage.Why3PreferencePage"
+            id="propertypage.preferences.why3"
+            name="Why3 Adapter">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="uk.ac.ncl.eventb.why3.prefpage.PreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
+         point="org.eventb.core.seqprover.autoTactics">
+      <autoTactic
+            auto="true"
+            class="uk.ac.ncl.eventb.why3.tactics.Why3DefaultScenarioRestricted"
+            id="autoWhy3Restricted"
+            name="Why3 restricted (discharge)"
+            post="true">
+      </autoTactic>
+      <autoTactic
+            auto="true"
+            class="uk.ac.ncl.eventb.why3.tactics.Why3DefaultScenarioUnrestricted"
+            id="autoWhy3Unrestricted"
+            name="Why3 unrestricted (discharge)"
+            post="true">
+      </autoTactic>
+   </extension>
+   <extension
+         point="org.eventb.core.seqprover.tacticParameterizers">
+      <parameterizer
+            class="uk.ac.ncl.eventb.why3.tactics.Why3Parametrizer"
+            id="Why3Parameterizer"
+            name="Why3">
+         <tacticParameter
+               default="false"
+               label="restricted"
+               type="Boolean">
+         </tacticParameter>
+         <tacticParameter
+               default="false"
+               label="cloud"
+               type="Boolean">
+         </tacticParameter>
+         <tacticParameter
+               label="scenario"
+               type="String"
+               default="">
+         </tacticParameter>
+      </parameterizer>
+   </extension>
+    <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="propertypage.preferences.why3"
+            class="uk.ac.ncl.eventb.why3.prefpage.scen.ScenarioPreferencePage"
+            id="propertypage.preferences.why3.scen"
+            name="Tool Scenarios">
+      </page>
+   </extension>   
+
+</plugin>

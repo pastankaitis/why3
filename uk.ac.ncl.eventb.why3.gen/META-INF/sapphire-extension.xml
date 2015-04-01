@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension xmlns="http://www.eclipse.org/sapphire/xmlns/extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <function>
+        <name>rule:Describe</name>
+        <impl>uk.ac.ncl.eventb.why3.gen.rules.RuleDescribeFunction</impl>
+        <description>Describes a rule as a why3 constant</description>
+    </function>
+    <function>
+        <name>rule:TranslateRule</name>
+        <impl>uk.ac.ncl.eventb.why3.gen.rules.RuleTranslationFunction</impl>
+    </function>
+    <function>
+        <name>rule:TranslateCatalog</name>
+        <impl>uk.ac.ncl.eventb.why3.gen.rules.CatalogTranslationFunction</impl>
+    </function>
+</extension>

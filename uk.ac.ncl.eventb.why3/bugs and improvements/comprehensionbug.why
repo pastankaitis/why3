@@ -1,0 +1,37 @@
+theory POx
+	use import int.Int
+	use import bool.Bool
+	use import int.EuclideanDivision
+	use import set.Set
+	use import set.SetComprehension
+	use import set.Fset
+	use import settheory.Interval
+	use import settheory.PowerSet
+	use import settheory.Relation
+	use import settheory.Image
+	use import settheory.InverseDomRan
+	use import settheory.Function
+	use import settheory.PowerSet
+	use import settheory.PowerRelation
+	use import eventb.Prods
+	use import eventb.FuncRel
+	use import eventb.SetProp
+	use import eventb.SetRelMod
+	use import eventb.Extras
+	use import inference.Inference
+
+(*
+	lemma l1:
+	(\ z:(int, int) . (let a, b = z in a + b)) (1, 2) = 3
+*)
+
+
+	goal g0: 	(* {x,x1·x+x1>5 ∣ x}⊆{x·x>4 ∣ x} *)
+	(subset 
+		(bsetc 
+			(\ z : (int, int) . (let (id_x, id_x1) = z in (id_x + id_x1) > 5)) 
+			(\ z : (int, int) . (let (id_x, id_x1) = z in id_x)) 
+		)
+		(bsetc (\id_x : int .(id_x > 4)) (\id_x : int .id_x)))
+
+end

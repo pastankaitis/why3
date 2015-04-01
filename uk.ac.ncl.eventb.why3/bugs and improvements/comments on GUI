@@ -1,0 +1,17 @@
+
+Firstly,  perhaps a good idea would be capability to import user written .why format libraries, together withh .tgen format.
+Maybe this could be done just by allowing .why format in Translation Definition window under Absolute File Path, though verbally it sounds it should be in Library Theory window. 
+
+Perhaps, for functions, which don't have direct definition, direct definition window could not appear in order not to mislead user with then appearing syntax errors. 
+
+Translation/Formatting: 
+	- New line  between different function/predicates. 
+	- Move Up/Down function removes other axioms/lemmas instead of changing position, seems to work with Translation rules
+	- Not essential, but maybe it would it be possible to have a better structure with newly created functions/predicates and their definition axioms/lemmas, perhaps it would be possible to associate them so, they could 
+	  associate with predicates/functions created
+	- Range returns set 'a, should set 'b
+	- For all functions and relations second input is (set 'b)
+	- Range subtraction second term should be (set 'b)
+	-  
+	
+	

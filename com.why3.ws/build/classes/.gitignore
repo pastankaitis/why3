@@ -1,0 +1,6 @@
+/.aws/
+/com/
+/credentials
+/credentials.save
+/doc.odt
+/log4j.properties

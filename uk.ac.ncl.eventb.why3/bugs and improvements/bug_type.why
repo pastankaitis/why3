@@ -1,0 +1,57 @@
+theory POx
+	use import int.Int
+	use import bool.Bool
+	use import int.EuclideanDivision
+	use import set.Set
+	use import set.SetComprehension
+	use import set.Fset
+	use import settheory.Interval
+	use import settheory.PowerSet
+	use import settheory.Relation
+	use import settheory.Image
+	use import settheory.InverseDomRan
+	use import settheory.Function
+	use import settheory.PowerSet
+	use import settheory.PowerRelation
+	use import eventb.Prods
+	use import eventb.FuncRel
+	use import eventb.SetProp
+	use import eventb.SetRelMod
+	use import eventb.Extras
+	use import inference.Inference
+
+	type type_QUESTION
+	type type_RESPONSE
+
+
+	predicate maxset (set 'a)
+	axiom maxset_axm:
+		forall s:set 'a, x:'a .  (maxset s) -> mem x s
+
+	constant type_RESPONSE : (set type_RESPONSE)
+	constant ebid_answer : (set (type_QUESTION, type_RESPONSE))
+	constant ebid_q : type_QUESTION
+	constant type_QUESTION : (set type_QUESTION)
+	constant ebid_response_0 : (set type_RESPONSE)
+	constant ebid_question : (set type_QUESTION)
+
+
+	axiom type_axm1: (maxset type_RESPONSE)
+	axiom type_axm2: (maxset type_QUESTION)
+
+
+	(* answer∈QUESTION → RESPONSE *)
+	axiom axm1 :(mem ebid_answer (type_QUESTION --> type_RESPONSE))
+	(* question⊆QUESTION *)
+	axiom axm2 :(subset ebid_question type_QUESTION)
+	(* response_0=answer[question] *)
+	axiom axm3 :(ebid_response_0 = (image ebid_answer ebid_question))
+	(* q∉question *)
+	axiom axm4 :(not mem ebid_q ebid_question)
+
+	(*
+	goal g0: 	(* q∈dom(answer)∧answer∈QUESTION ⇸ RESPONSE *)
+((mem ebid_q (dom ebid_answer)) /\ (mem ebid_answer (type_QUESTION +-> type_RESPONSE)))
+	*)
+	lemma bug: 1=2
+end

@@ -1,0 +1,30 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: why3 Adapter Plugin (alpha)
+Bundle-SymbolicName: uk.ac.ncl.eventb.why3;singleton:=true
+Bundle-Version: 0.0.1.qualifier
+Bundle-Vendor: Newcastle University
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Require-Bundle: org.eventb.core.seqprover,
+ org.eventb.core.ast,
+ org.eventb.ui,
+ org.eventb.core,
+ org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eventb.pp,
+ org.rodinp.core,
+ org.eclipse.core.resources,
+ org.rodinp.keyboard.core,
+ org.rodinp.keyboard.ui
+Bundle-ActivationPolicy: lazy
+Bundle-Activator: uk.ac.ncl.eventb.why3.main.Why3Plugin
+Bundle-ClassPath: .,
+ lib/commons-io-2.4.jar,
+ lib/jersey-bundle-1.18.jar,
+ lib/jettison-1.1.jar,
+ lib/cloudparser.jar,
+ lib/java-cup-11a-runtime.jar
+Export-Package: uk.ac.ncl.eventb.why3.cloud,
+ uk.ac.ncl.eventb.why3.driver,
+ uk.ac.ncl.eventb.why3.main,
+ uk.ac.ncl.eventb.why3.translator

@@ -1,0 +1,1307 @@
+(*Introducing set type.*)
+theory Set
+
+ type set 'a
+
+ meta "material_type_arg" type set, 0
+end
+
+(*Predicate element of*)
+theory Membership
+
+	use import Set
+
+ predicate mem 'a (set 'a)
+end
+
+(*Equality*)
+theory Equality
+
+	use import Set
+	use import Membership
+
+ predicate (==) (s1 s2: set 'a) = forall x : 'a. mem x s1 <-> mem x s2
+	axiom equality_def1:
+   		 forall s1 s2: set 'a. s1 == s2 -> s1 = s2
+end
+
+(*Subset*)
+theory Subset
+
+	use import Set
+	use import Membership
+
+ predicate subset (s1 s2: set 'a) = forall x : 'a. mem x s1 -> mem x s2
+	lemma subset_def1:
+    		forall s: set 'a. subset s s
+
+  	lemma subset_def2:
+    		forall s1 s2 s3: set 'a. subset s1 s2 -> subset s2 s3 -> subset s1 s3
+end
+
+(*Empty Set*)
+theory EmptySet
+
+	use import Set	
+
+ constant empty : set 'a
+end
+
+(*is_empty set predicate*)
+theory IsEmpty
+
+	use import Set
+	use import Membership
+	use import EmptySet
+
+ predicate is_empty (s: set 'a) = forall x: 'a. not (mem x s)
+	axiom empty_def1: is_empty (empty : set 'a)
+
+  	lemma empty_def2: forall x:'a. mem x empty <-> false
+end
+
+(*Adding element to the set*)
+theory ElementAddition
+
+	use import Set
+	use import Membership
+
+ function add 'a (set 'a) : set 'a
+	axiom add_def1:
+	    forall x y: 'a. forall s: set 'a.
+   		 mem x (add y s) <-> x = y \/ mem x s
+end
+
+(*Removing element from set*)
+theory ElementRemove
+
+	use import Set
+	use import Membership
+
+ function remove 'a (set 'a) : set 'a
+	axiom remove_def1:
+   		 forall x y : 'a, s : set 'a.
+   			 mem x (remove y s) <-> x <> y /\ mem x s
+end
+
+(*Set Union*)
+theory Union
+
+	use import Set
+	use import Membership
+
+ function union (set 'a) (set 'a) : set 'a
+	axiom union_def1:
+   		 forall s1 s2: set 'a, x: 'a.
+    			mem x (union s1 s2) <-> mem x s1 \/ mem x s2
+end
+
+(*Set Intersection*)
+theory Intersection
+
+	use import Set
+	use import Membership
+
+ function inter (set 'a) (set 'a) : set 'a
+	axiom intersection_def1:
+   		 forall s1 s2: set 'a, x: 'a.
+    			mem x (inter s1 s2) <-> mem x s1 /\ mem x s2
+end
+
+(*Set Difference*)
+theory Difference
+
+	use import Set
+	use import Membership
+	use import Subset
+
+ function diff (set 'a) (set 'a) : set 'a
+	axiom difference_def1:
+   		 forall s1 s2: set 'a, x: 'a.
+   			 mem x (diff s1 s2) <-> mem x s1 /\ not (mem x s2)
+	
+  	lemma difference_def2:
+    		forall s1 s2: set 'a. subset (diff s1 s2) s1
+end
+
+(*Choose Arbitrary Element*)
+theory Choose
+
+	use import Set
+	use import IsEmpty
+	use import Membership
+
+ function choose (s:set 'a) : 'a
+	axiom choose_def1:
+    		forall s: set 'a. not (is_empty s) -> mem (choose s) s
+end
+
+(*SetComprehension in form {x | p x }*)
+theory Comprehension
+
+	use import Set
+	use import Membership
+  
+ use HighOrd as HO
+
+ function comprehension (p: HO.pred 'a) : set 'a
+	axiom comprehension_def:
+    		forall p: HO.pred 'a.
+    			forall x: 'a. mem x (comprehension p) <-> p x
+end
+
+(*Filter in form { x | x in U and p(x) }*)
+theory Filter
+
+	use import Comprehension
+	use import Set
+	use import Membership
+
+ function filter (p: HO.pred 'a) (u: set 'a) : set 'a =
+   	 comprehension (\ x: 'a. p x /\ mem x u)
+end
+
+(*Map { f x | x in U }*)
+theory Map
+
+	use import Comprehension
+	use import Set
+	use import Membership
+
+ function map (f: HO.func 'a 'b) (u: set 'a) : set 'b =
+ 	   comprehension (\ y: 'b. exists x: 'a. mem x u /\ y = f x)
+
+  	lemma map_def1:
+   		 forall f: HO.func 'a 'b, u: set 'a.
+    			forall x: 'a. mem x u -> mem (f x) (map f u)
+end
+
+(*Singleton*)
+theory Singleton
+ 
+	use import Set
+	use import EmptySet
+	use import ElementAddition
+
+ function singleton (x: 'a) : set 'a = add x empty
+end
+
+(*Integer Set*)
+theory Integer
+	
+	use import Membership
+	use import Set
+
+ function integer : set int
+	axiom integer_def1: forall x : int. mem x integer
+end
+
+(*Natural Set*)
+theory Natural
+
+	use import Membership
+	use import Set
+	use import int.Int
+
+ function natural : set int
+ 	axiom natural_def1:
+   		 forall x:int. mem x natural <-> x >= 0 
+end
+(*Interval*)
+theory Interval
+
+	use import Membership
+	use import Set
+	use import int.Int
+	use import EmptySet
+	use import ElementAddition
+
+ function mk int int : set int
+	axiom interval_def1:
+    		forall x a b : int [mem x (mk a b)].
+     			 mem x (mk a b) <-> a <= x <= b
+
+	lemma interval_def2:
+     		forall a b:int. a > b -> mk a b = empty
+
+  	lemma interval_def3:
+     		forall a b:int. a <= b -> (mk a b) = add b (mk a (b-1))
+end
+
+(*Power Set*)
+theory PowerSet
+
+	use import Set
+	use import Membership
+	use import Subset
+
+ function pow (set 'a) : set (set 'a)
+	axiom power_def1: forall x y:set 'a [mem x (pow y)].
+     		 mem x (pow y) <-> subset x y
+end
+
+(*Introducing relation type*)
+theory Relation
+
+	use import Set
+
+ type rel 'a 'b = set ('a , 'b)
+end
+
+(* image is the subset of a function's codomain which is the output of the function on a subset of its domain *)
+theory Image
+
+	use import Relation
+	use import Set
+	use import Membership
+	use import Union
+	use import Singleton
+	use import ElementAddition
+
+ function image (r : rel 'a 'b) (dom : set 'a) : set 'b
+	axiom image_def1:
+    		forall r : rel 'a 'b, dom : set 'a, y : 'b [mem y (image r dom)].
+    			mem y (image r dom) <-> exists x: 'a. mem x dom /\ mem (x,y) r
+
+  	lemma image_def2:
+   		 forall r : rel 'a 'b, s t: set 'a.
+   			 image r (union s t) = union (image r s) (image r t)
+
+  	lemma image_def3:
+   		 forall r : rel 'a 'b, dom : set 'a, x:'a.
+   			 image r (add x dom) = union (image r (singleton x))
+                                        (image r dom)
+end
+
+(*Inverse*)
+theory Inverse
+
+	use import Relation
+	use import Membership
+
+ function inverse (rel 'a 'b) : rel 'b 'a
+	axiom inverse_def1:
+   	     forall r : rel 'a 'b. forall x : 'a, y : 'b.
+     		 mem (y,x) (inverse r) <-> mem (x,y) r
+end
+
+(*Domain*)
+theory Domain
+
+	use import Relation
+	use import Set	
+	use import Membership
+
+ function dom (rel 'a 'b) : set 'a
+	axiom dom_def1:
+   		 forall r : rel 'a 'b. forall x : 'a.
+      			mem x (dom r) <-> exists y : 'b. mem (x,y) r
+end
+
+(*Range*)
+theory Range
+
+	use import Relation
+	use import Set
+	use import Membership
+
+ function ran (rel 'a 'b) : set 'b
+	axiom ran_def:
+    		forall r : rel 'a 'b. forall y : 'b.
+     			 mem y (ran r) <-> exists x : 'a. mem (x,y) r
+end
+
+(*Partial Function*)
+theory PartialFunction
+
+	use import Relation
+	use import Set
+	use import Membership
+	use import Subset
+
+ function (+->) (s:set 'a) (t:set 'b) : set (rel 'a 'b)
+ 	axiom partialfunction_def1:
+    		forall f:rel 'a 'b, s:set 'a, t:set 'b.
+      			mem f (s +-> t) <->
+      				 (forall x:'a, y:'b. mem (x,y) f -> mem x s /\ mem y t)
+      					 /\
+       					(forall x:'a, y1 y2:'b. mem (x,y1) f /\ mem (x,y2) f -> y1=y2)
+
+ 	lemma partialfunction_def2:
+   		 forall f:rel 'a 'b, s:set 'a, t:set 'b, x:'a, y:'b.
+      			mem f (s +-> t) -> mem (x,y) f -> mem x s
+
+ 	lemma partialfunction_def3:
+    		forall f:rel 'a 'b, s:set 'a, t:set 'b, x:'a, y:'b.
+     			 mem f (s +-> t) -> mem (x,y) f -> mem y t
+
+  	lemma partialfunction_def4:
+     		forall f:rel 'a 'b, s:set 'a, t u:set 'b.
+      			subset t u ->
+     				 mem f (s +-> t) -> mem f (s +-> u)
+
+ 	lemma partialfunction_def5:
+     		forall f:rel 'a 'b, s:set 'a, t u:set 'b.
+     			 subset u t ->
+      				mem f (s +-> t) ->
+      				(forall x:'a, y:'b. mem (x,y) f -> mem y u) ->
+     					 mem f (s +-> u)
+end
+
+(*Total Function*)
+theory TotalFunction
+
+	use import Set
+	use import Membership
+	use import Equality
+	use import Relation
+	use import PartialFunction
+	use import Domain
+
+ function (-->) (s:set 'a) (t:set 'b) : set (rel 'a 'b)
+	  axiom totalfunction_def1:
+    		forall f:rel 'a 'b, s:set 'a, t:set 'b.
+     			 mem f (s --> t) <-> mem f (s +-> t) /\ dom f == s
+	
+	  lemma totalfunction_def2:
+   		 forall f:rel 'a 'b, s:set 'a, t:set 'b.
+     			 mem f (s --> t) -> mem f (s +-> t)
+end
+
+(*Apply*)
+theory Apply
+
+	use import Set
+	use import Membership
+	use import Relation
+	use import TotalFunction
+	use import PartialFunction
+	use import Inverse
+  
+ function apply (rel 'a 'b) 'a : 'b
+	axiom apply_def1:
+     		forall f:rel 'a 'b, s:set 'a, t:set 'b, a:'a.
+      			 mem a s /\ mem f (s --> t) -> mem (a, apply f a) f
+
+ 	axiom apply_def2:
+     		forall f:rel 'a 'b, s:set 'a, t:set 'b, a:'a, b:'b.
+      			 mem f (s --> t) /\ mem (a,b) f -> b = apply f a
+
+  	lemma apply_def3:
+    		 forall f:rel 'a 'b, s:set 'a, t:set 'b. forall x y:'a.
+     			  mem f (s --> t) ->
+      				 mem (inverse f) (t +-> s) ->
+       					mem x s -> mem y s ->
+      						 (apply f x) = (apply f y) -> x=y
+end
+
+(*Times*)
+theory Times
+
+	use import Set
+	use import Membership
+	use import Relation
+
+ function times (set 'a) (set 'b) : rel 'a 'b
+	axiom times_def1:
+    		forall a : set 'a, b : set 'b, x : 'a, y : 'b.
+  		  mem (x,y) (times a b) <-> mem x a /\ mem y b
+end
+(*  Cartesian product is a mathematical operation which returns a set (or product set or simply product) from multiple sets. That is, for sets A and B, the Cartesian product A × B is the set of all ordered pairs (a, b) where a ∈ A and b ∈ B. *)
+theory CartesianProduct   
+
+	use import Set
+	use import Membership
+	use import EmptySet
+	use import Intersection
+	use import Subset
+	use import Relation
+
+ function cprod (s:set 'a) (t : set 'b) : rel 'a 'b  
+	axiom cprod_def1: 
+		forall x : 'a, y : 'b, s : set 'a, t : set 'b.
+			mem (x,y) (cprod s t)   <->  (mem x s /\ mem y t) 
+
+	lemma cprod_def2:
+		forall x : 'a, y : 'b, s : set 'a.
+			mem (x, y) (cprod s empty) <->
+					mem (x, y) empty
+	
+	lemma cprod_def3:
+		forall x : 'a, y : 'b, s : set 'a, t r : set 'b.
+			mem (x, y) (cprod s (inter t r)) <->
+				mem (x, y) (inter (cprod s t) (cprod s r))	
+	
+	lemma cprod_def4:
+		forall  s t: set 'a,  r : set 'b.
+			(subset s t) ->
+				(subset (cprod s r) (cprod t r))
+end
+
+(* Direct product is an operation that takes two groups G and H and constructs a new group, in Event - B denoted as p ⊗ q *)
+theory DirectProduct
+
+	use import Relation
+	use import Domain
+	use import Membership
+	use import Union
+
+ function dprod (rel 'a 'b) (rel 'a 'c) : rel 'a ('b, 'c) 
+	axiom dprod_def1:
+	 	forall s:(rel 'a 'b), t: (rel 'a 'c), x: 'a, y:'b, z: 'c.
+			(mem (x, (y, z)) (dprod s t)) <->
+					(mem (x, y) s) /\ (mem (x, z) t)
+
+	lemma dprod_def2:
+		forall s:(rel 'a 'b), t: (rel 'a 'c), x: 'a.
+			mem x (dom (dprod s t)) -> 
+				mem x (union (dom s) (dom t))
+end
+
+(*Parallel Product p || q*)
+theory ParallelProduct
+	
+	use import Relation
+	use import Membership
+
+ function pprod (rel 'a 'c) (rel 'b 'd) : (rel ('a, 'b) ('c, 'd)) 
+	axiom pprod_def1: 
+		forall p : rel 'a 'c, q : rel 'b 'd, x : 'a, y : 'b, m : 'c,  n : 'd.
+			(mem ((x, y), (m, n)) (pprod p q)) <-> ((mem (x, m) p) /\ (mem (y, n) q))
+end
+
+(*Total Relation*)
+theory TotalRelation
+
+	use import Set	
+	use import Membership
+	use import Domain
+	use import Relation
+
+
+ function (<<->) (s:set 'a) (t:set 'b) : set (rel 'a 'b) 
+  	axiom trel_def1:
+		forall r : rel 'a 'b, s : set 'a, t: set 'b. 
+			(mem r (s <<-> t)) -> dom r = s
+end
+
+(*Surjective Relation*)
+theory SurjectiveRelation
+
+	use import Set	
+	use import Relation
+	use import Membership
+	use import Range
+
+ function (<->>) (s:set 'a) (t:set 'b) : set (rel 'a 'b)
+  	axiom srel_def1:
+		forall r : rel 'a 'b, s : set 'a, t : set 'b. 
+			(mem r (s <->> t)) -> ran r = t
+end
+
+(*Total Surjective Relation*)
+theory TotalSurjectiveRelation
+
+	use import Set	
+	use import Relation
+	use import Membership
+	use import Domain
+	use import Range
+
+ function (<<->>) (s:set 'a) (t:set 'b) : set (rel 'a 'b) 
+ 	axiom tsrel_def1:
+		forall r : rel 'a 'b, t : set 'b, s : set 'a.  
+			(mem r (s <<->> t)) -> dom r = s /\ ran r = t 
+end
+
+(*Partial Injection*)
+theory PartialInjection
+
+	use import Set
+	use import Relation
+	use import Membership
+	use import PartialFunction
+	use import Inverse
+
+
+ function (>+>) (s:set 'a) (t:set 'b) : set (rel 'a 'b) 
+  	axiom pinj_def1: 
+		forall f : (rel 'a 'b), s : set 'a, t : set 'b. 
+			mem f (s >+> t) <-> (mem f (s +-> t) /\ mem (inverse f) (t +-> s)) 
+end
+
+(*Partial Surjection*)
+theory PartialSurjection
+
+	use import Set
+	use import Membership
+	use import PartialFunction
+	use import Range
+	use import Relation
+
+
+ function (+->>) (s:set 'a) (t:set 'b) : set (rel 'a 'b) 
+	 axiom psur_def1: 
+		forall f : rel 'a 'b, s : set 'a, t : set 'b. 
+	  		mem f (s +->> t)  <-> (mem f (s +-> t) /\ (ran f) = t)
+end
+
+(*Total Injection*)
+theory TotalInjection
+	
+	use import Relation
+	use import PartialInjection
+	use import Set
+	use import Membership
+	use import Domain
+	use import PartialFunction
+	use import Inverse
+
+
+ function (>->) (s:set 'a) (t:set 'b) : set (rel 'a 'b)  
+	axiom tinj_def: 
+		forall f : rel 'a 'b, s : set 'a, t : set 'b. 
+			mem f (s >-> t) <-> (mem f (s >+> t) /\ (dom f) = s)
+
+	lemma tinj_def2: 
+		forall f : rel 'a 'b, s : set 'a, t : set 'b. 
+			mem f (s >-> t) <-> (mem f (s +-> t) /\ mem (inverse f) (t +-> s) /\ (dom f) = s)
+end
+
+(*Total Surjection*)
+theory TotalSurjection
+
+	use import Set	
+	use import Relation
+	use import Membership
+	use import TotalFunction
+	use import Range
+	use import PartialFunction
+	use import Domain
+	
+
+ function (-->>) (s:set 'a) (t:set 'b) : set (rel 'a 'b)  
+	axiom tsur_def1: 
+		forall f : rel 'a 'b, s : set 'a, t : set 'b. 
+			mem f (s -->> t)  <-> (mem f (s --> t) /\ (ran f) = t)
+
+	lemma tsurj_def2: 
+		forall f : rel 'a 'b, s : set 'a, t : set 'b. 
+			mem f (s -->> t) <->
+				(mem f (s +-> t) /\ (dom f) = s /\ (ran f) = t)
+end
+
+(*Bijection*)
+theory Bijection
+	
+	use import Set	
+	use import Relation
+	use import TotalInjection
+	use import TotalSurjection
+	use import PartialInjection
+	use import Membership
+	use import Inverse
+	use import Domain
+	use import Range
+
+ function (>->>) (s:set 'a) (t:set 'b) : set (rel 'a 'b)  
+	axiom bij_def1: 
+		forall f : rel 'a 'b, s : set 'a, t : set 'b. 
+			mem f (s >->> t) <-> 
+				(mem f (s >-> t) /\ mem f (s -->> t))
+
+	lemma bij_def2: 
+		forall f : rel 'a 'b, s : set 'a, t : set 'b. 
+		mem f (s >->> t) -> 
+			(mem f (s >+> t) /\ mem (inverse f) (t >+> s) /\ (dom f) = s  /\ (ran f) = t)
+end
+
+(*Forward Composition*)
+theory ForwardComposition
+
+	use import Relation
+	use import Membership
+	use import Domain
+	use import Subset
+	use import Range
+	use import EmptySet
+	use import Intersection
+
+ function fcomp (rel 'a  'b) (rel 'b 'c)  :  (rel 'a 'c) 
+	axiom fcomp_def1:
+		forall f:(rel 'a  'b), g: (rel 'b 'c), x: 'a, y: 'c .
+			(mem (x, y) (fcomp f g)) <->
+				exists j: 'b . (mem (x, j) f) /\ (mem (j, y) g)
+
+	lemma fcomp_def2:
+		forall f:(rel 'a 'b), g: (rel 'b 'c) .
+			(subset (dom (fcomp f g)) (dom f))
+	
+	lemma fcomp_def3:
+		forall f:(rel 'a 'b), g: (rel 'b 'c) .
+			(subset (ran (fcomp f g)) (ran g))
+		  	
+	lemma fcomp_def4:
+		forall f:(rel 'a 'b), g: (rel 'b 'c) .
+			((inter (ran f) (dom g)) = empty) -> 
+					((fcomp f g) = empty)
+end
+
+(*Backward Composition*)
+theory BackwardComposition
+
+	use import Relation
+	use import ForwardComposition
+	use import Membership
+
+ function bcomp (rel 'b 'c)  (rel 'a 'b)  :  (rel 'a 'c )
+	axiom bcomp_def1:
+		forall f:(rel 'b 'c), g: (rel 'a 'b), x: 'a, y: 'c .
+			(mem (x, y) (bcomp f g)) <->
+				exists j: 'b . (mem (x, j) g) /\ (mem (j, y) f)
+
+        lemma bcomp_def2:
+		forall f:(rel 'b 'c), g: (rel 'a 'b), x: 'a, y: 'c.
+			mem (x, y) (bcomp f g) <-> mem (x, y) (fcomp g f)	
+end
+
+(*Strict Subset*)
+theory ProperSubset
+
+	use import Set
+	use import Relation
+	use import Membership	
+
+ predicate subsetprop(s1 s2 : set 'a) = (forall x : 'a. mem x s1 -> mem x s2) /\ (exists x: 'a. mem x s2 /\ (not (mem x s1))) 
+end
+
+(*Finite Set*)
+theory Finite
+	
+	use import Set
+	use import Relation
+	use import Bijection
+	use import EmptySet
+	use import Singleton
+	use import Union
+	use import ElementAddition
+	use import Membership
+
+ predicate finite (s : set 'a)
+	axiom finite_def1:
+		forall s: set 'a. (s = empty) -> finite s
+
+ 	axiom finite_def2:
+		forall x: 'a. finite (singleton x)
+
+ 	axiom finite_def3:
+		forall s, t: set 'a. (finite s /\ finite t) -> finite (union s t)
+
+	lemma finite_def4:
+		forall s: set 'a, x: 'a. finite s -> finite (add x s)
+
+	lemma finite_def5:
+		forall s : set 'a, t : set 'b.
+			(exists f : rel 'a 'b. mem f (s >->> t) /\ (finite t))  
+				-> (finite s)	
+end
+
+(*Minimum*)
+theory Minimum
+
+	use import Set
+	use import Membership
+	use import Singleton
+	use import ElementAddition
+	use import Finite
+	use import int.Int
+
+ function min (s : set int) : int
+
+	axiom min_def1:
+		forall s : set int.
+			(finite s) ->
+				not (mem ((min s) - 1) s)  
+
+	lemma min_def2:
+		forall s : set int.
+			finite s ->
+				min s < (min s) + 1
+
+	axiom min_def3:
+		forall s : set int, x : int.
+			finite s ->
+				min (singleton x) = x
+		
+	axiom min_def4:
+		forall s : set int, x y: int.
+			finite s ->
+				(y > x) -> min (add y (singleton x)) = x
+		  
+	axiom min_def5:
+		forall s : set int, x y: int.
+			finite s ->
+				(y < x) -> min (add y (singleton x)) = y		
+end
+
+(*Maximum*)
+theory Maximum
+
+	use import Set
+	use import Membership
+	use import Singleton
+	use import ElementAddition
+	use import Finite
+	use import int.Int
+
+ function max (s : set int) : int 
+
+	axiom max_def1:
+		forall s : set int.
+			finite s -> not mem ((max s) + 1) s  
+
+	axiom max_def2:
+		forall s : set int.
+			finite s -> max(s) - 1 < (max s) 
+
+	axiom max_def3:
+		forall s : set int, x : int.
+			finite s -> max (singleton x) = x
+
+	axiom max_def4:
+		forall s : set int, x y: int.
+			finite s -> (y > x) -> max (add y (singleton x)) = y
+		  
+	axiom max_def5:
+		forall s : set int, x y: int.
+			finite s -> (y < x) -> max (add y (singleton x)) = x
+end
+
+(*Power1*)
+theory Power1Set
+	
+	use import Set	
+	use import Membership
+	use import EmptySet
+	use import Subset
+	
+ function pow1 (set 'a) : set (set 'a) 		
+  		axiom mem_power1 : forall x y:set 'a.
+    			  mem x (pow1 y) <-> 
+				((not subset empty x) /\ subset x y)
+end
+
+(*Cardinality*)
+theory Cardinality
+
+	use import Set
+	use import Finite
+	use import int.Int
+	use import ProperSubset
+	use import Relation
+	use import Bijection
+	use import TotalInjection
+	use import TotalSurjection
+	use import CartesianProduct
+	use import IsEmpty
+	use import Singleton
+	use import Membership
+	use import ElementAddition
+	use import EmptySet
+	use import Subset
+	use import Union
+
+  function card (set 'a) : int 
+  	axiom card_def0:  forall s: set 'a. (finite s) -> card s >= 0
+
+ 	axiom card_def1:
+		forall s: set 'a.
+ 			((finite s) /\ is_empty s) -> (card s) = 0
+
+ 	 axiom card_def2:
+		forall x : 'a. 
+			card (singleton x) = 1
+		
+ 	 axiom card_def3:
+    		forall x : 'a, s : set 'a.
+			(finite s) /\ not (mem x s) -> card (add x s) = 1 + card s
+
+ 	 lemma card_def4:
+		card (add 1 (add 2 empty)) = 2
+	
+  	 lemma card_def5: 
+		forall s, t: set 'a.
+			finite t /\ (forall x : 'a. mem x s -> mem x t) -> 
+				(card s) <= (card t)
+
+ 	 lemma card_def6:
+		forall s, t: set 'a.
+			(finite t /\ (forall x : 'a. mem x s -> mem x t)) ->
+	 			subset s t
+
+  	lemma card_def7:
+		forall s, t: set 'a.
+			(finite t /\ subset s t) -> 
+				(card s) <= (card t)  	
+ 	lemma card_def8:
+      		 forall s, t: set 'a.
+			(finite t /\ 	
+      				 ((forall x: 'a. mem x s -> mem x t) /\ (exists b : 'a. not mem b s /\ mem b t))) ->
+					 (card s) < (card t)			
+ 	lemma card_def9:
+		forall s, t: set 'a.
+			(finite t /\ 
+				(subsetprop s t)) -> 
+					(card s) < (card t) 
+
+ 	lemma card_def10:
+		forall s : set 'a, t : set 'b, f : rel 'a 'b.
+			(finite t /\ (mem f (s >->> t))) ->
+				(card s = card t)
+
+
+ 	lemma card_def11: 
+		forall s : set 'a, t : set 'b, f : rel 'a 'b, g : rel 'b 'a.
+			mem f (s >-> t) /\ mem g (t >-> s) ->
+				(exists h: rel 'a 'b . mem h (s >->> t))
+ 
+	 lemma card_def12:
+		forall s : set 'a, t : set 'b, f : rel 'a 'b.
+	 		((card s = card t) /\ mem f (s >-> t)) ->
+				mem f (s -->> t)
+
+ 	lemma card_def13: 
+		forall s t : set 'a.
+			(is_empty t) ->
+				(card (cprod t s)) = 0
+  		
+ 	lemma card_def14:
+		forall s  : set 'a, x : 'a.
+			card (cprod (singleton x) s) = (card s) 
+
+ 	lemma card_def15:
+		forall s t : set 'a, x : 'a.
+			(not mem x s) ->
+        			card (cprod (union s (singleton x)) t) = card (cprod s t) + (card t) 
+	
+ 	lemma card_def16:
+		forall s : set 'a, t : set 'b.
+			card (cprod s t) = (card s) * (card t)
+end
+
+(*N-th element of a finite set*)
+theory FsetNth
+
+	use import Set
+	use import Cardinality
+	use import int.Int
+	use import Membership
+
+ function nth (i: int) (s: set 'a) : 'a
+	axiom nth_def1:
+    		forall s: set 'a, i j: int.
+   			 0 <= i < card s -> 0 <= j < card s -> nth i s = nth j s -> i = j
+
+  	axiom nth_def2:
+  		forall s: set 'a, x: 'a. mem x s ->
+   			 exists i: int. 0 <= i < card s /\ x = nth i s
+end
+
+(*Maxset*)
+theory MaxSet
+	
+	use import Set
+	use import Membership
+
+ predicate maxset (set 'a)
+		axiom maxset_axm:
+			forall s:set 'a, x:'a .  (maxset s) -> mem x s
+end
+
+(*Domain Restriction*)
+theory DomainRestriction
+
+	use import Set
+	use import Membership
+	use import Subset
+	use import Domain
+	use import EmptySet
+	use import Relation
+
+ function (<|) (s:set 'a) (r : rel 'a 'b) : rel 'a 'b 
+        axiom  domRes_def1:
+               forall x : 'a, y : 'b, s : set 'a, r : rel 'a 'b.
+               		mem (x,y) (s <| r) <->  (mem x s) /\ mem (x, y) r
+
+	lemma  domRes_def2:
+	       forall x : 'a, y : 'b, s : set 'a, r : rel 'a 'b.
+	     		 mem (x, y) (s <| r) ->
+				 mem (x, y) r
+
+	lemma  domRes_def3:
+	       forall s : set 'a, r : rel 'a 'b.
+	      	 (forall x : 'a, y : 'b.
+	      	 	(mem (x, y) (s <| r) ->
+				 mem (x, y) r)) ->  subset (s <| r) r
+
+	lemma   domRes_def4:
+                forall r : rel 'a 'b, s : set 'a.
+                	subset (s <| r) r
+  
+	lemma   domRes_def5:
+                forall r : rel 'a 'b, x : 'a, y : 'b.
+                (mem (x, y)  ((dom r) <| r)) -> mem (x, y) r
+
+	lemma   domRes_def6:
+                forall r : rel 'a 'b, x : 'a, y : 'b.
+               		 mem (x, y) (empty <| r) <-> mem (x, y) empty
+end
+
+(*Domain Subtraction*)
+theory DomainSubtraction
+
+	use import Relation
+	use import DomainRestriction
+	use import Set	
+	use import Membership
+	use import Union
+	use import Intersection	
+	use import EmptySet
+
+ function (<<|)  (s :set 'a) (r : rel 'a 'b) : rel 'a 'b 
+        axiom domSub_def1:
+               forall x : 'a, y : 'b, s : set 'a, r : rel 'a 'b.
+               		mem (x,y) (s <<| r) <->  not mem x s /\ mem (x, y) r
+
+	lemma domSub_def2:
+	      forall x : 'a, y : 'b, s : set 'a, r : rel 'a 'b.
+	     		 mem (x, y) (union (s <| r)  (s <<| r)) ->
+				mem (x, y) r
+
+	lemma domSub_def3:
+	      forall x : 'a, y : 'b, s : set 'a, r : rel 'a 'b.
+	      		mem (x, y) (inter (s <| r)  (s <<| r)) <->
+				mem (x, y) empty
+
+	lemma domSub_def4:
+		forall  x : 'a, y : 'b, r : rel 'a 'b.
+			mem (x, y) (empty <<| r) ->
+		 		mem (x, y) r
+ 
+end
+
+(*Range Restriction*)
+theory RangeRestriction
+
+	use import Relation
+	use import Set
+	use import Membership
+	use import Range
+	use import Subset
+	 
+ function (|>)  (r : rel 'a 'b) (t:set 'b) : rel 'a 'b  
+        axiom ranRes_def1:
+               forall x : 'a, y : 'b, t : set 'b, r : rel 'a 'b.
+           	    mem (x,y) (r |> t) <->   mem y t /\ mem (x, y) r
+
+	lemma ranRes_def2:
+                forall r : rel 'a 'b, x : 'a, y : 'b.
+                 mem (x, y) (r |> (ran r)) ->
+			 mem (x, y) r
+	 lemma ranRes_def3:
+                forall r : rel 'a 'b, t : set 'b.
+               	subset (r |> t) r
+end
+
+(*Range Subtraction*)
+theory RangeSubtraction
+  
+	use import Relation
+	use import RangeRestriction	
+	use import Set
+	use import Membership
+	use import Union
+
+ function (|>>)  (r : rel 'a 'b) (t:set 'b) : rel 'a 'b  
+        axiom rangesub_def1:
+               forall x : 'a, y : 'b, t : set 'b, r : rel 'a 'b.
+                mem (x,y) (r |>> t) <->  not mem y t /\ mem (x, y) r
+
+	lemma rangesub_def2:
+	      forall x : 'a, y : 'b, t : set 'b, r : rel 'a 'b.
+	      mem (x, y) (union (r |> t)  (r |>> t)) ->
+			mem (x, y) r
+end
+
+(*Overriding*)
+
+theory Overriding
+
+	use import Relation
+	use import DomainSubtraction
+	use import Membership
+	use import Domain
+	use import Union
+	use import Range
+	use import Image	
+ 
+ function (<+) (r : rel 'a 'b) (g : rel 'a 'b) : (rel 'a 'b) 	
+	axiom over_def1:
+		forall x : 'a, y : 'b, r : (rel 'a 'b), g : (rel 'a 'b).
+			mem (x, y) (r <+ g) <-> mem (x, y) (union g (dom(g) <<| r))  
+		
+	lemma over_def2:
+		forall r : rel 'a 'b, x : 'a, y : 'b.
+			mem (x, y) (r <+ r) <->
+					mem (x, y) r
+	lemma over_def3:
+		forall r : rel 'a 'b, g : (rel 'a 'b),  y : 'b.
+			mem y (image (r <+ g) (dom (r <+ g))) ->
+				mem y (union (ran r) (ran g))
+end
+
+(*Generalized Union*)
+theory GeneralizedUnion
+	
+	use import Set
+	use import EmptySet
+	use import Membership
+	use import Union
+	use import Cardinality
+
+ function gunion (set (set 'a)) : (set 'a) 
+ 	axiom gunion_def1:
+		forall x : 'a.
+			mem x (gunion empty) ->
+				mem x empty
+	
+	 axiom gunion_def2: (*Should be logical eq., unless remove elements of.*)
+	  	 forall t r : set 'a, s : (set (set 'a)), x : 'a.
+			((mem t s) /\ (mem r s) /\ (card s = 2)) ->
+					(mem x (gunion s) -> 
+						mem x (union r t))
+
+	axiom gunion_def3:
+		forall t : set 'a, s : (set (set 'a)), x : 'a.
+			((card s = 1) /\ (mem t s)) 
+					-> ((mem x (gunion s)) -> (mem x t)) 
+end
+
+(*Generalized Intersection*)
+theory GeneralizedIntersection
+
+	use import Set
+	use import EmptySet
+	use import Membership
+	use import Intersection
+	use import Cardinality
+
+ function ginter (set (set 'a)) : (set 'a) 
+ 	axiom ginter_def1:
+ 	 	forall x : 'a.
+			mem x (ginter empty) ->
+				mem x empty	
+
+	 axiom ginter_def2:
+  		 forall t r : set 'a, s : (set (set 'a)), x : 'a.
+			((mem t s) /\ (mem r s) /\ (card s = 2)) ->
+				(mem x (ginter s) -> 
+					mem x (inter r t))
+end
+
+(*Partition*)
+theory Partition
+
+	use import Set
+	use import Membership	
+	use import IsEmpty
+	use import Intersection
+	use import GeneralizedUnion
+	use import GeneralizedIntersection
+	use import ProperSubset
+
+ function partition (s : set 'a) (x: set (set 'a))  : set 'a  
+ 	 axiom partition_def1:
+                forall s : set 'a, x : set (set 'a), y : 'a.
+                    (mem y (partition s x)) ->
+                    	gunion x = s
+
+ 	 axiom partition_def2:
+                forall s : set 'a, x : set (set 'a), y : 'a.
+                    (mem y (partition s x)) ->
+                    	(is_empty (ginter x))
+
+ 	axiom partition_def3:
+                forall s : set 'a, x : set (set 'a), y : 'a.
+                    (mem y (partition s x)) ->
+                      (forall a, b: set 'a. (mem a x) /\ (mem b x) /\ a <> b -> 
+			(inter a b) = s)
+                    
+  	axiom partition_def4:
+                forall s : set 'a, x : set (set 'a), y : 'a.
+                  (mem y (partition s x)) ->
+			(forall q : set 'a. (mem q x) -> 
+					subsetprop q s)     
+end
+
+(*Set Comprehension*)
+theory SetComprehension
+	
+	use import Comprehension
+	use import Set
+
+ function bsetc  (p: HO.pred 'a) (f: HO.func 'a 'b) : set 'b =
+				      comprehension (\ y: 'b. exists x: 'a. p x /\ y = f x)
+end
+
+(*Natural1*)
+theory Natural1
+
+	use import Set
+	use import Singleton
+	use import Natural
+	use import Difference
+	use import Membership
+	use import Interval
+	use import ProperSubset
+	use import int.Int
+	
+
+ function bnatural1 : (set int) = (diff natural (singleton 0)) 
+ 	
+	lemma natural_def1:
+ 			(not (mem 0 bnatural1))
+ 	lemma natural_def2:
+ 		forall x: int . (mem x natural) /\ x > 0 -> (mem x bnatural1)
+
+ 	lemma natural_def3:
+		(mem 0 natural) /\ not (mem 0 bnatural1)
+
+ 	lemma natural_def4:
+		(forall x : int. mem x bnatural1 -> mem x natural)
+
+ 	lemma natural_def5:
+ 		(exists x: int. mem x natural /\ (not (mem x bnatural1)))
+
+ 	lemma natural_def6:
+		(forall x : int. mem x bnatural1 -> mem x natural) /\
+ 			(exists x: int. mem x natural /\ (not (mem x bnatural1))) 
+
+ 	lemma natural_def7:
+		(forall x : int. mem x bnatural1 -> mem x natural) /\
+ 			(exists x: int. mem x natural /\ (not (mem x bnatural1))) 
+				<->
+					(subsetprop bnatural1 natural)
+	lemma natural_def8:
+ 		(subsetprop bnatural1 natural)
+end
+
+(*Boolean*)
+theory Boolean
+
+	use import Set
+	use import Membership
+	use import bool.Bool
+
+ function boolean : set bool
+	axiom boolset_def1:
+			forall x : bool.
+					mem x boolean
+end
+
+(*Identity*)
+theory Identity
+
+	use import Relation
+	use import Membership
+
+ constant id : (rel 'a 'a)
+ 	axiom id_def1:	
+    		forall x,y : 'a. (mem (x, y) id) <-> x = y
+end
+
+(*Projection1*)
+theory Projection1
+
+	use import Relation
+	use import Image
+	use import Membership
+	use import Singleton
+	
+ constant prj1 : (rel  ('a, 'b) 'a)    
+ 	 axiom prj1_def1:
+   		 forall x,z : 'a, y: 'b. (mem ((x, y), z) prj1) <-> x = z
+
+	 lemma prj1_def2:
+		image prj1 (singleton (1, (2, 3))) = (singleton 1)	
+end
+
+(*Projection2*)
+theory Projection2
+
+	use import Membership
+	use import Relation
+	
+
+ constant prj2 : (rel  ('a, 'b) 'b) 
+  	 axiom prj2_def1:
+   		 forall x : 'a, y, z: 'b. (mem ((x, y), z) prj2) <-> y = z
+end
+
+(*Unary Minus*)
+theory UnaryMinus
+	
+	use import Interval
+	use import Integer
+	use import Membership
+	use import Natural
+
+ function unMinus (int) : (int) 
+	axiom unMinus_def1:
+		forall x : int.
+			(unMinus (unMinus x))  = x 
+	axiom unMinus_def2:
+		forall x : int.
+			mem x integer <->
+				mem (unMinus x) integer
+	axiom unMinus_def3:
+		forall x : int.
+			mem x natural ->
+				 not mem (unMinus x) natural
+
+end 
+
+(*Multiplication*)
+theory Multiplication
+
+ 	type t
+  	constant one : t
+ function (*) t t : t
+end
+
+(*Exponentiation*)
+theory Exponentiation
+
+  	use import int.Int
+	use import Multiplication
+
+     
+ function power t int : t
+	axiom Power_0 : forall x: t. power x 0 = one
+
+  	axiom Power_s : forall x: t, n: int. n >= 0 -> power x (n+1) = x * power x n
+
+  	lemma Power_s_alt: forall x: t, n: int. n > 0 -> power x n = x * power x (n-1)
+
+ 	lemma Power_1 : forall x : t. power x 1 = x
+
+  	lemma Power_sum : forall x: t, n m: int. 0 <= n -> 0 <= m ->
+   		 power x (n+m) = power x n * power x m
+
+ 	lemma Power_mult : forall x:t, n m : int. 0 <= n -> 0 <= m ->
+   		 power x (Int.(*) n m) = power (power x n) m
+
+ 	lemma Power_mult2 : forall x y: t, n: int. 0 <= n ->
+		    power (x * y) n = power x n * power y n
+
+end

@@ -1,0 +1,119 @@
+-------------------------------------------------------------------------
+After enumerated set has been declared, no constants are needed! (Capital letter clash)
+-------------------------------------------------------------------
+theory POx
+	use import int.Int
+	use import bool.Bool
+	use import int.EuclideanDivision
+	use import set.Set
+	use import set.SetComprehension
+	use import set.Fset
+	use import settheory.Interval
+	use import settheory.PowerSet
+	use import settheory.Relation
+	use import settheory.Image
+	use import settheory.InverseDomRan
+	use import settheory.Function
+	use import settheory.PowerSet
+	use import settheory.PowerRelation
+	use import eventb.Prods
+	use import eventb.FuncRel
+	use import eventb.SetProp
+	use import eventb.SetRelMod
+	use import eventb.Extras
+	use import inference.Inference
+
+	type type_APPS
+	type type_JOBS
+	type type_STATUS = TLIT_ON | TLIT_OFF
+	type type_CORES
+	type type_THREADS
+
+	constant ebid_app_threads : (set (type_APPS, type_THREADS))
+	constant ebid_t : (set type_THREADS)
+	constant ebid_CORE_HEAT_FLUX : (set ((type_CORES, int), int))
+	constant type_JOBS : (set type_JOBS)
+	constant ebid_jobs : (set (type_JOBS, type_APPS))
+	constant type_THREADS : (set type_THREADS)
+	constant TLIT_ON : type_STATUS
+	constant ebid_core_freq : (set (type_CORES, int))
+	constant ebid_core_temp : (set (type_CORES, int))
+	constant ebid_core_vdd : (set (type_CORES, int))
+	constant ebid_core_status : (set (type_CORES, type_STATUS))
+	constant ebid_c : type_CORES
+	constant ebid_ENV_TEMP : int
+	constant ebid_apps : (set type_APPS)
+	constant ebid_affinity : (set (type_THREADS, type_CORES))
+	constant type_CORES : (set type_CORES)
+	constant ebid_job_alloc : (set (type_JOBS, type_THREADS))
+	constant ebid_ENV_HEAT_FLUX : (set ((type_CORES, (set (type_CORES, int))), int))
+	constant ebid_CORE_TEMP_CRIT : (set (type_CORES, int))
+	constant ebid_jobs_pending : (set (type_JOBS, type_APPS))
+	constant type_STATUS : (set type_STATUS)
+	constant type_APPS : (set type_APPS)
+	constant ebid_threads : (set type_THREADS)
+
+	(* ∅⊂CORES *)
+	axiom axm1 :(subsetprop (empty:((set type_CORES))) type_CORES)
+	(* finite(CORES) *)
+	axiom axm2 :(finite type_CORES)
+	(* CORE_HEAT_FLUX∈CORES × ℕ → ℕ *)
+	axiom axm3 :(mem ebid_CORE_HEAT_FLUX ((cprod type_CORES natural) --> natural))
+	(* ∀c,v·c∈CORES∧v∈ℕ1⇒CORE_HEAT_FLUX(c ↦ v)≥CORE_HEAT_FLUX(c ↦ v − 1) *)
+	axiom axm4 :(forall ebid_c : type_CORES, ebid_v : int . ((((mem ebid_c type_CORES) /\ (mem ebid_v bnatural1)) -> ((apply ebid_CORE_HEAT_FLUX (ebid_c ,  ebid_v)) >= (apply ebid_CORE_HEAT_FLUX (ebid_c ,  (ebid_v - 1)))))))
+	(* ENV_TEMP∈ℕ *)
+	axiom axm5 :(mem ebid_ENV_TEMP natural)
+	(* ENV_HEAT_FLUX∈CORES × (CORES → ℕ) → ℕ *)
+	axiom axm6 :(mem ebid_ENV_HEAT_FLUX ((cprod type_CORES (type_CORES --> natural)) --> natural))
+	(* CORE_TEMP_CRIT∈CORES → ℕ1 *)
+	axiom axm7 :(mem ebid_CORE_TEMP_CRIT (type_CORES --> bnatural1))
+	(* core_status∈CORES → STATUS *)
+	axiom axm8 :(mem ebid_core_status (type_CORES --> type_STATUS))
+	(* core_freq∈CORES ⇸ ℕ *)
+	axiom axm9 :(mem ebid_core_freq (type_CORES +-> natural))
+	(* core_vdd∈CORES ⇸ ℕ *)
+	axiom axm10 :(mem ebid_core_vdd (type_CORES +-> natural))
+	(* dom(core_freq)=core_status∼[{ON}] *)
+	axiom axm11 :((dom ebid_core_freq) = (image (inverse ebid_core_status) (singleton TLIT_ON)))
+	(* dom(core_freq)=dom(core_vdd) *)
+	axiom axm12 :((dom ebid_core_freq) = (dom ebid_core_vdd))
+	(* core_temp∈CORES → ℕ *)
+	axiom axm13 :(mem ebid_core_temp (type_CORES --> natural))
+	(* threads⊆THREADS *)
+	axiom axm14 :(subset ebid_threads type_THREADS)
+	(* affinity∈threads ⇸ CORES *)
+	axiom axm15 :(mem ebid_affinity (ebid_threads +-> type_CORES))
+	(* ran(affinity)⊆core_status∼[{ON}] *)
+	axiom axm16 :(subset (ran ebid_affinity) (image (inverse ebid_core_status) (singleton TLIT_ON)))
+	(* apps⊆APPS *)
+	axiom axm17 :(subset ebid_apps type_APPS)
+	(* app_threads∈apps  threads *)
+	axiom axm18 :(mem ebid_app_threads (ebid_apps <<->> ebid_threads))
+	(* app_threads∼∈threads → apps *)
+	axiom axm19 :(mem (inverse ebid_app_threads) (ebid_threads --> ebid_apps))
+	(* jobs∈JOBS ⇸ apps *)
+	axiom axm20 :(mem ebid_jobs (type_JOBS +-> ebid_apps))
+	(* job_alloc∈JOBS ⤔ ran(app_threads) *)
+	axiom axm21 :(mem ebid_job_alloc (type_JOBS >+> (ran ebid_app_threads)))
+	(* dom(job_alloc)=dom(jobs) *)
+	axiom axm22 :((dom ebid_job_alloc) = (dom ebid_jobs))
+	(* jobs∼;job_alloc⊆app_threads *)
+	axiom axm23 :(subset (fcomp (inverse ebid_jobs) ebid_job_alloc) ebid_app_threads)
+	(* jobs_pending∈JOBS ⇸ apps *)
+	axiom axm24 :(mem ebid_jobs_pending (type_JOBS +-> ebid_apps))
+	(* dom(jobs)∩dom(jobs_pending)=∅ *)
+	axiom axm25 :((inter (dom ebid_jobs) (dom ebid_jobs_pending)) = (empty:((set type_JOBS))))
+	(* c∈CORES *)
+	axiom axm26 :(mem ebid_c type_CORES)
+	(* core_status(c)=ON *)
+	axiom axm27 :((apply ebid_core_status ebid_c) = TLIT_ON)
+	(* c∈dom(core_status) *)
+	axiom axm28 :(mem ebid_c (dom ebid_core_status))
+	(* core_status∈CORES ⇸ STATUS *)
+	axiom axm29 :(mem ebid_core_status (type_CORES +-> type_STATUS))
+	(* t=affinity∼[{c}] *)
+	axiom axm30 :(ebid_t = (image (inverse ebid_affinity) (singleton ebid_c)))
+
+	goal g0: 	(* job_alloc ⩥ t∈JOBS ⤔ ran(app_threads) *)
+(mem (ebid_job_alloc |>> ebid_t) (type_JOBS >+> (ran ebid_app_threads)))
+end

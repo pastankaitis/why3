@@ -1,0 +1,500 @@
+
+\newcommand{\fMODE} 			{\mathrm{MODE}}
+\newcommand{\fMORDER} 			{\mathrm{ORDER}}
+\newcommand{\fERROR} 			{\mathrm{ERROR}}
+\newcommand{\fNOERROR} 			{\mathrm{NoError}}
+\newcommand{\fINITMODE} 		{\mathrm{InitMode}}
+\newcommand{\fMode}[1] 			{\mathrm{#1}}
+\newcommand{\fConst}[1] 		{\mathrm{#1}}
+
+\newcommand{\kG}[1]					{{\color{blue}{\texttt{#1}}}}
+\newcommand{\kB}[1]					{\mathsf{#1}}
+\newcommand{\kW}[1]					{{\footnotesize{\kG{#1}}}}
+
+\newcommand{\kS}[1]					{{\footnotesize{$#1$}}}
+
+
+\newcommand{\kwSYSTEM}			{machine}
+\newcommand{\kwINTERFACE}		{INTERFACE}
+\newcommand{\kwREFINEMENT}		{refinement}
+\newcommand{\kwVARIABLES}		{variables}
+\newcommand{\kwINVARIANT}		{invariant}
+\newcommand{\kwINITIALISATION}	{initialisation}
+\newcommand{\kwEVENTS}			{events}
+\newcommand{\kwOPERATIONS}		{OPERATIONS}
+\newcommand{\kwPROCESS}		        {PROCESS}
+\newcommand{\kwMEND}				{end}
+\newcommand{\kwPlink}		        {process link}
+\newcommand{\kwWITH}		        {with}
+\newcommand{\kwPARAMETERS}		{parameters}
+\newcommand{\kwPROPERTIES}		{properties}
+\newcommand{\kwANY}				{any}
+\newcommand{\kwWHERE}			{where}
+\newcommand{\kwTHEN}			{then}
+\newcommand{\kwWHEN}			{when}
+\newcommand{\kwSEES}			{sees}
+\newcommand{\kwSKIP}			{skip}
+\newcommand{\kwEND}				{end}
+\newcommand{\kwBEGIN}			{begin}
+\newcommand{\kwPRE}				{pre}
+\newcommand{\kwPOST}			{post}
+\newcommand{\kwREFINES}			{refines}
+\newcommand{\LABEL}[1]			{\mathrm{#1}:~}
+
+\newcommand{\Ztext}[1]			{\quad {\color{gray}{/\!/ ~ \text{#1}}}}
+
+\newcommand{\EventBSnippet}[1] {
+	\begin{center}
+	\centerline{{\footnotesize{
+	$
+	\begin{array}{@{}l} #1 \end{array}
+	$
+	}}}
+	\end{center}
+}
+
+\newcommand{\Snippet}[1] {
+	\begin{center}
+	\centerline{{\footnotesize{
+	$
+	\begin{array}{@{}l} #1 \end{array}
+	$
+	}}}
+	\end{center}
+}
+
+\newcommand{\Eq}[2] {
+	\begin{equation}
+	\begin{array}{@{}l} #2 \end{array}
+	\label{#1}
+	\end{equation}	
+}
+
+
+\newcommand{\EventBSnippetBox}[1] {
+	\centerline{{\fbox{\footnotesize{
+	$
+	\begin{array}{@{}l} #1 \end{array}
+	$
+	}}}}
+}
+
+\newcommand{\EventBSystem}[2] {
+	\begin{center}
+	{\footnotesize{
+	$
+	\begin{array}{@{}l}
+		\kG{\kwSYSTEM} ~ \kB{#1} \\
+		\quad \begin{array}{@{}l} #2 \end{array} \\
+		\kG{\kwMEND}
+	\end{array}
+	$
+	}}
+	\end{center}
+}
+
+\newcommand{\EventBSystemX}[2] {
+	\begin{center}
+	{\footnotesize{
+	$
+	\begin{array}{@{}l}
+		\kG{\kwSYSTEM} ~ \kB{#1} \\
+		\quad \begin{array}{@{}l} #2 \end{array} \\
+	\end{array}
+	$
+	}}
+	\end{center}
+}
+
+
+\newcommand{\EventBContext}[2] {
+	{\footnotesize{
+	$
+	\begin{array}{@{}l}
+		\kG{context} ~ \kB{#1} \\
+		\quad \begin{array}{@{}l} #2 \end{array} \\
+		\kG{\kwMEND}
+	\end{array}
+	$
+	}}
+}
+
+\newcommand{\EventBContextd}[2] {
+	{\footnotesize{
+	$
+	\begin{array}{@{}l}
+		\kG{context} ~ \kB{#1} \\
+		\quad \begin{array}{@{}l} #2 \end{array} \\
+		%\kG{$\cdots$}
+	\end{array}
+	$
+	}}
+}
+
+
+\newcommand{\EventBInterface}[2] {
+	\begin{center}
+	{\footnotesize{
+	$
+	\begin{array}{@{}l}
+		\kG{\kwINTERFACE} ~ \kB{#1} \\
+		\quad \begin{array}{@{}l} #2 \end{array} \\
+		\kG{\kwMEND}
+	\end{array}
+	$
+	}}
+	\end{center}
+}
+
+\newcommand{\EventBRefinement}[2] {
+	\begin{center}
+	{\footnotesize{
+	$
+	\begin{array}{@{}l}
+		\kG{\kwREFINEMENT} ~ \kB{#1} \\
+		\quad \begin{array}{@{}l} #2 \end{array} \\
+		\kG{\kwMEND}
+	\end{array}
+	$
+	}}
+	\end{center}
+}
+
+
+
+
+\newcommand{\EventBTemplate}[2] {
+	$
+	\begin{array}{@{}l}
+		\kG{\kwTEMPLATE} ~ \kB{#1} \\
+		\begin{array}{@{}l} #2 \end{array}
+	\end{array}
+	$
+}
+
+
+\newcommand{\EventBTemplateB}[2] {
+	$\left (
+	\begin{array}{@{}l}
+		\kG{\kwTEMPLATE} ~ \kB{#1} \\
+		\begin{array}{@{}l} #2 \end{array}
+	\end{array}
+	\right )$
+}
+
+\newcommand{\EventBGroup}[2] {
+
+
+		\kG{group} ~ \kB{#1} ~ \kG{begin}\\
+		\begin{array}{@{}l} \quad \begin{array}{rll} #2 \end{array} \end{array} \\
+		\kG{end} \\
+}
+
+\newcommand{\EventBCont}[1] {
+		\begin{center}
+	{\footnotesize{
+	$
+	\begin{array}{@{~~~}l} #1 \end{array}
+	$}}
+	\end{center}
+}
+
+\newcommand{\EventBContX}[1] {
+		\begin{center}
+	{\footnotesize{
+	$
+	\begin{array}{@{}l}
+		\begin{array}{@{}l} \quad \begin{array}{rll} #1 \end{array} \\ \kG{\kwMEND} \end{array}
+	\end{array}
+	$}}
+		\end{center}
+}
+
+
+		
+
+
+\newcommand{\EventBE}[1] {
+	\begin{array}{@{}l} \quad \begin{array}{lll} #1 \end{array} \end{array}
+}
+
+
+\newcommand{\EventBRefines}[1] {
+	\kG{\kwREFINES} ~ \kB{#1} \\
+}
+
+\newcommand{\EventBPlink} {
+	\kG{\kwPlink} ~ \kB \\
+}
+
+\newcommand{\EventBImplements}[1] {
+	\kG{implements} ~ \kB{#1} \\
+}
+
+
+\newcommand{\EventBExtends}[1] {
+	\kG{extends} ~ \kB{#1} \\
+}
+
+\newcommand{\EventBSees}[1] {
+	\kG{\kwSEES} ~ \kB{#1} \\
+}
+
+
+\newcommand{\EventBVars}[1] {
+	\kG{\kwVARIABLES} \\
+	\quad \begin{array}{l} #1 \end{array} \\
+}
+
+\newcommand{\EventBConstantsC}[1] {
+	\kG{constants} ~ #1 \\
+}
+
+\newcommand{\EventBAxioms}[1] {
+	\kG{axioms} \\
+	\quad \begin{array}{l} #1 \end{array} \\
+}
+
+\newcommand{\EventBFlow}[1] {
+	\kG{\kwFLOW} \\
+	\quad \begin{array}{l} #1 \end{array} \\
+}
+
+\newcommand{\EventBVarsC}[1] {
+	\kG{\kwVARIABLES} ~ #1 \\
+}
+
+\newcommand{\EventBAuxVarsC}[1] {
+	\kG{auxiliary} ~ #1 \\
+}
+
+%\newcommand{\EventBConstantsC}[1] {
+%	\kG{constants} ~ #1 \\
+%}
+
+%\newcommand{\EventBAxioms}[1] {
+%	\kG{axioms} ~ #1 \\
+%}
+
+\newcommand{\EventBParamsC}[1] {
+	\kG{\kwPARAMETERS} ~ #1 \\
+}
+
+\newcommand{\EventBProperties}[1] {
+	\kG{\kwPROPERTIES} \\
+	\quad \begin{array}{l} #1 \end{array} \\
+}
+
+\newcommand{\EventBInv}[1] {
+	\kG{\kwINVARIANT} \\
+	\quad \begin{array}{l} #1 \end{array} \\
+}
+
+\newcommand{\EventBVariant}[1] {
+	\kG{variant} ~ #1 \\
+}
+
+\newcommand{\EventBInvC}[1] {
+	\kG{\kwINVARIANT} ~ #1 \\
+}
+
+\newcommand{\EventBFaultsC}[1] {
+	\kG{faults} ~ #1 \\
+}
+
+\newcommand{\EventBUsesC}[1] {
+	\kG{uses} ~ \kB{#1} \\
+}
+
+\newcommand{\EventBUses}[2] {
+	\kG{uses} ~ \kB{#1} \\
+	\quad \begin{array}{l} #2 \end{array} \\
+}
+
+
+\newcommand{\EventBFaults}[1] {
+	\kG{faults} \\
+	\quad \begin{array}{l} #1 \end{array} \\
+}
+
+\newcommand{\Fault}[2] {
+	\kB{#1} : #2 \\
+}
+
+
+
+\newcommand{\EventBInit}[1] {
+	\kG{\kwINITIALISATION} \\
+	\quad \begin{array}{l} #1 \end{array} \\
+}
+
+\newcommand{\EventBInitC}[1] {
+	\kG{\kwINITIALISATION} ~ #1 \\
+}
+
+\newcommand{\EventBEvents}[1] {
+	\kG{\kwEVENTS} \\
+	\quad \begin{array}{lll} #1 \end{array} \\
+}
+
+%\newcommand{\EventBProcess}[1] {
+%	\kG{\kwPROCESS} \\
+%	\quad \begin{array}{lll} #1 \end{array} \\
+%}
+
+
+
+\newcommand{\EventBOperations}[1] {
+	\kG{\kwOPERATIONS} \\
+	\quad \begin{array}{lll} #1 \end{array} \\
+}
+
+\newcommand{\EventBProcess}[1] {
+	\kG{\kwPROCESS} \\
+	\quad \begin{array}{lll} #1 \end{array} \\
+}
+
+
+\newcommand{\EventBEventsTwoCol}[1] {
+	\kG{\kwEVENTS} \\
+	\quad \begin{array}{lll} #1 \end{array} \\
+}
+
+\newcommand{\EventBContTwoCol}[1] {
+	$\begin{array}{lll} #1 \end{array}$
+}
+
+\newcommand{\EventBEventsRow}[2] {
+	\begin{array}{lll} #1 \end{array} & \quad & \begin{array}{lll} #2 \end{array}\\
+}
+
+\newcommand{\EventBEventsRowSpan}[1] {
+	\multicolumn{3}{l}{ \begin{array}{lll} #1 \end{array} }\\
+}
+
+\newcommand{\EventBAny}[4] {
+				\kB{#1} = \\
+				\kG{\kwANY} ~ #2 ~ \kG{\kwWHERE} \\
+				\quad \begin{array}{l} #3 \end{array} \\
+				\kG{\kwTHEN} \\
+				\quad \begin{array}{l} #4 \end{array} \\
+				\kG{\kwEND} \\
+}
+
+\newcommand{\EventBAnyInline}[4] {
+				\kB{#1}  = \\
+  			  	\kG{\kwANY} ~ #2 ~ \kG{\kwWHERE} \\
+			   	\quad \begin{array}{l} #3 \end{array} \\
+			   	\kG{\kwTHEN} \\
+			   	\quad \begin{array}{l} #4 \end{array} \\
+			   	\kG{\kwEND} \\
+}
+
+\newcommand{\EventBAnyWith}[5] {
+  \kB{#1} & = 	& 	\kG{\kwANY} ~ #2 ~ \kG{\kwWHERE} \\
+			  && 	\quad \begin{array}{l} #3 \end{array} \\
+			  && 	\kG{\kwWITH} \\
+			  && 	\quad \begin{array}{l} #4 \end{array} \\
+			  && 	\kG{\kwTHEN} \\
+			  && 	\quad \begin{array}{l} #5 \end{array} \\
+			  && 	\kG{\kwEND} \\
+}
+
+
+\newcommand{\EventBAnyOperation}[4] {
+  \kB{#1} & = 	& 	\kG{\kwANY} ~ #2 ~ \kG{\kwPRE} \\
+			  && 	\quad \begin{array}{l} #3 \end{array} \\
+			  && 	\kG{\kwPOST} \\
+			  && 	\quad \begin{array}{l} #4 \end{array} \\
+			  && 	\kG{\kwEND} \\
+}
+
+\newcommand{\EventBAnyOperationC}[4] {
+  \kB{#1} & = 	& 	\kG{\kwANY} ~ #2 ~ \kG{\kwPRE} ~#3~ \kG{\kwPOST} ~#4~ \kG{\kwEND} \\
+}
+
+\newcommand{\EventBAnyRefines}[5] {
+  \kB{#1} ~ \kG{refines} ~  #2 & = 	& 	\kG{\kwANY} ~ #3 ~ \kG{\kwWHERE} \\
+			  && 	\quad \begin{array}{l} #4 \end{array} \\
+			  && 	\kG{\kwTHEN} \\
+			  && 	\quad \begin{array}{l} #5 \end{array} \\
+			  && 	\kG{\kwEND} \\
+}
+
+\newcommand{\EventBAnyRefinesWith}[6] {
+  \kB{#1} ~ \kG{refines} ~  #2 & = 	& 	\kG{\kwANY} ~ #3 ~ \kG{\kwWHERE} \\
+			  && 	\quad \begin{array}{l} #4 \end{array} \\
+			  && 	\kG{\kwWITH} \\
+			  && 	\quad \begin{array}{l} #5 \end{array} \\
+			  && 	\kG{\kwTHEN} \\
+			  && 	\quad \begin{array}{l} #6 \end{array} \\
+			  && 	\kG{\kwEND} \\
+}
+
+
+\newcommand{\EventBAnyC}[4] {
+   \kB{#1} & = 	& 	\kG{\kwANY} ~ #2 ~ \kG{\kwWHERE} ~ #3 ~ \kG{\kwTHEN} ~#4~ \kG{\kwEND} \\
+}
+
+
+\newcommand{\EventBWhen}[3] {
+   \kB{#1} & = 	& \kG{\kwWHEN} \\ 
+			  && 	\quad \begin{array}{l} #2 \end{array} \\
+			  && 	\kG{\kwTHEN} \\
+			  && 	\quad \begin{array}{l} #3 \end{array} \\
+			  && 	\kG{\kwEND} \\
+}
+
+\newcommand{\EventBWhenWith}[4] {
+   \kB{#1} & = 	& 	\kG{with} \\ 
+   			  &&	\quad \begin{array}{l} #2 \end{array} \\
+   			  && 	\kG{\kwWHEN} \\ 
+			  && 	\quad \begin{array}{l} #3 \end{array} \\
+			  && 	\kG{\kwTHEN} \\
+			  && 	\quad \begin{array}{l} #4 \end{array} \\
+			  && 	\kG{\kwEND} \\
+}
+
+\newcommand{\EventBWhenOperation}[3] {
+   \kB{#1} & = 	& \kG{\kwPRE} \\ 
+			  && 	\quad \begin{array}{l} #2 \end{array} \\
+			  && 	\kG{\kwPOST} \\
+			  && 	\quad \begin{array}{l} #3 \end{array} \\
+			  && 	\kG{\kwEND} \\
+}
+
+\newcommand{\EventBWhenRefines}[4] {
+  \kB{#1} ~ \kG{ref} ~ #2 & = 	& \kG{\kwWHEN} \\ 
+			  && 	\quad \begin{array}{l} #3 \end{array} \\
+			  && 	\kG{\kwTHEN} \\
+			  && 	\quad \begin{array}{l} #4 \end{array} \\
+			  && 	\kG{\kwEND} \\
+}
+
+\newcommand{\EventBWhenC}[3] {
+   \kB{#1} & = 	& \kG{\kwWHEN} ~#2~ \kG{\kwTHEN} ~#3~ \kG{\kwEND} \\
+}
+
+\newcommand{\EventBWhenOperationC}[3] {
+   \kB{#1} & = 	& \kG{pre} ~#2~ \kG{post} ~#3~ \kG{\kwEND} \\
+}
+
+\newcommand{\EventBBegin}[2] {
+   \kB{#1} & = 	& 	\kG{\kwBEGIN} \\
+			  && 	\quad \begin{array}{l} #2 \end{array} \\
+			  && 	\kG{\kwEND} \\
+}
+
+\newcommand{\EventBBeginC}[2] {
+   \kB{#1} & = 	& 	\kG{\kwBEGIN} ~ #2 ~ \kG{\kwEND} \\
+}
+
+\newcommand{\EventBSkip}[1] {
+   \kB{#1} & = 	& 	\kG{\kwSKIP} \\
+}
+
+\newcommand{\EventBSF}[2] {
+   \kB{#1} & = 	& 	#2 \\
+}
+
+

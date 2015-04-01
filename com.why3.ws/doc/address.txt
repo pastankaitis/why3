@@ -1,0 +1,2 @@
+http://ec2-54-194-206-149.eu-west-1.compute.amazonaws.com/com.why3.ws/rest/service/run
+http://localhost:8080/com.why3.ws/rest/service/run
