@@ -1,6 +1,6 @@
 (*
 	This library is dedicated for product functions.
-	Library includes: Cartesian Product, Direct Product, Parallel Product
+	Library includes: Cartesian Product, Direct Product,
 *)
 theory Prods
 
